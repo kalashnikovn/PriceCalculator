@@ -1,7 +1,8 @@
 ﻿namespace PriceCalculator.Api.Bll.Models;
 
 public record CalculationLogModel(
-    double Volume,
-    double Price,
-    double Weight
+    decimal Volume,
+    decimal Price,
+    decimal Weight,
+    decimal Distance
     );
