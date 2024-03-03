@@ -1,3 +1,6 @@
+using PriceCalculator.Api.Bll.Services;
+using PriceCalculator.Api.Bll.Services.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -8,6 +11,8 @@ builder.Services.AddSwaggerGen(o =>
 {
     o.CustomSchemaIds(x => x.FullName);
 });
+
+builder.Services.AddScoped<IPriceCalculatorService, PriceCalculatorService>();
 
 var app = builder.Build();
 
