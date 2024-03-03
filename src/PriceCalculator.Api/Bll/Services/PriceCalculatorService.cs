@@ -68,6 +68,7 @@ public class PriceCalculatorService : IPriceCalculatorService
     public decimal CalculatePrice(IReadOnlyList<GoodModel> goods, decimal distance)
     {
         if (!goods.Any()) throw new ArgumentException("Список не может быть пустым!");
+        if (distance <= 0) throw new ArgumentOutOfRangeException(nameof(distance), distance, "Растояние должно быть больше 0");
         
         var volumePrice = CalculatePriceByVolume(goods, out var volume);
         var weightPrice = CalculatePriceByWeight(goods, out var weight);
