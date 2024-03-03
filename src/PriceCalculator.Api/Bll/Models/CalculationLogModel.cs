@@ -2,5 +2,6 @@
 
 public record CalculationLogModel(
     double Volume,
-    double Price
+    double Price,
+    double Weight
     );
