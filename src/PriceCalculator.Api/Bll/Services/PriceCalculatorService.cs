@@ -23,8 +23,9 @@ public class PriceCalculatorService : IPriceCalculatorService
         if (!goods.Any()) throw new ArgumentException("Список не может быть пустым!");
         
         var volumePrice = CalculatePriceByVolume(goods, out var volume);
-
         var weightPrice = CalculatePriceByWeight(goods, out var weight);
+        
+        
 
         var resultPrice = Math.Max(volumePrice, weightPrice);
         
@@ -42,16 +43,16 @@ public class PriceCalculatorService : IPriceCalculatorService
     private static double CalculatePriceByVolume(GoodModel[] goods, out double volume)
     {
         volume = goods
-            .Sum(x => x.Height * x.Length * x.Width);
+            .Sum(x => x.Height * x.Length * x.Width / 1000);
 
         return volume * _volumeRatio;
     }
     
     private static double CalculatePriceByWeight(GoodModel[] goods, out double weight)
     {
-        weight = goods.Sum(x => x.Weight);
+        weight = goods.Sum(x => x.Weight / 1000);
 
-        return weight * _volumeRatio;
+        return weight * _weightRatio;
     }
 
     public CalculationLogModel[] QueryLog(int take)
