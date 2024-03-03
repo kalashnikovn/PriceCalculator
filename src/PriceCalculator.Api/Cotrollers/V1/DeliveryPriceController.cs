@@ -9,11 +9,13 @@ namespace PriceCalculator.Api.Cotrollers.V1;
 public class DeliveryPriceController : ControllerBase
 {
 
+    [HttpPost("calculate")]
     public CalculateResponse Calculate(CalculateRequest request)
     {
         throw new NotImplementedException();
     }
 
+    [HttpPost("get-history")]
     public GetHistoryResponse GetHistory(GetHistoryRequest request)
     {
         throw new NotImplementedException();
