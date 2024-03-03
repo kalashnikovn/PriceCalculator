@@ -4,7 +4,7 @@ using PriceCalculator.Api.Bll.Services.Interfaces;
 using PriceCalculator.Api.Requests.V1;
 using PriceCalculator.Api.Responses.V1;
 
-namespace PriceCalculator.Api.Cotrollers.V1;
+namespace PriceCalculator.Api.Controllers.V1;
 
 [ApiController]
 [Route("v1/[controller]")]
