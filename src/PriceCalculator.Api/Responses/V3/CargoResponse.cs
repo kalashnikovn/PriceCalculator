@@ -1,4 +1,4 @@
-﻿namespace PriceCalculator.Api.Responses.V2;
+﻿namespace PriceCalculator.Api.Responses.V3;
 
 public record CargoResponse(
     decimal Volume,
