@@ -1,5 +1,7 @@
 using PriceCalculator.Api.Bll.Services;
 using PriceCalculator.Api.Bll.Services.Interfaces;
+using PriceCalculator.Api.Dal.Repositories;
+using PriceCalculator.Api.Dal.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,7 @@ builder.Services.AddSwaggerGen(o =>
 });
 
 builder.Services.AddScoped<IPriceCalculatorService, PriceCalculatorService>();
+builder.Services.AddSingleton<IStorageRepository, StorageRepository>();
 
 var app = builder.Build();
 
