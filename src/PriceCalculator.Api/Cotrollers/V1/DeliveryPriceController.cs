@@ -32,9 +32,16 @@ public class DeliveryPriceController : ControllerBase
     }
 
     [HttpPost("get-history")]
-    public GetHistoryResponse GetHistory(GetHistoryRequest request)
+    public GetHistoryResponse[] GetHistory(GetHistoryRequest request)
     {
-        throw new NotImplementedException();
+        var result = _priceCalculatorService.QueryLog(request.Take);
+
+        return result
+            .Select(x => new GetHistoryResponse(
+                new CargoResponse(x.Volume),
+                x.Price
+            ))
+            .ToArray();
     }
     
 }
