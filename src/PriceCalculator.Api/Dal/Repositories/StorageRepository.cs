@@ -12,8 +12,10 @@ public class StorageRepository : IStorageRepository
         _storage.Add(entity);
     }
 
-    public StorageEntity[] Query()
+    public IReadOnlyList<StorageEntity> Query()
     {
         return _storage.ToArray();
     }
+
+    public void Clear() => _storage.Clear();
 }

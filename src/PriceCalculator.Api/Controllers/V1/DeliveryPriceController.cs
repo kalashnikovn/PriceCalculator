@@ -4,7 +4,7 @@ using PriceCalculator.Api.Bll.Services.Interfaces;
 using PriceCalculator.Api.Requests.V1;
 using PriceCalculator.Api.Responses.V1;
 
-namespace PriceCalculator.Api.Cotrollers.V1;
+namespace PriceCalculator.Api.Controllers.V1;
 
 [ApiController]
 [Route("v1/[controller]")]
@@ -42,6 +42,12 @@ public class DeliveryPriceController : ControllerBase
                 x.Price
             ))
             .ToArray();
+    }
+
+    [HttpPost("delete-history")]
+    public void DeleteHistory()
+    {
+        _priceCalculatorService.DeleteHistory();
     }
     
 }

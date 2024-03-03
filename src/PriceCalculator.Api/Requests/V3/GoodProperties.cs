@@ -1,4 +1,4 @@
-﻿namespace PriceCalculator.Api.Requests.V2;
+﻿namespace PriceCalculator.Api.Requests.V3;
 
 public record GoodProperties(
     decimal Length,
