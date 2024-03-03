@@ -43,5 +43,11 @@ public class DeliveryPriceController : ControllerBase
             ))
             .ToArray();
     }
+
+    [HttpPost("delete-history")]
+    public void DeleteHistory()
+    {
+        _priceCalculatorService.DeleteHistory();
+    }
     
 }

@@ -6,4 +6,5 @@ public interface IStorageRepository
 {
     void Save(StorageEntity entity);
     IReadOnlyList<StorageEntity> Query();
+    void Clear();
 }

@@ -84,4 +84,9 @@ public class PriceCalculatorService : IPriceCalculatorService
 
         return resultPrice;
     }
+
+    public void DeleteHistory()
+    {
+        _storageRepository.Clear();
+    }
 }
