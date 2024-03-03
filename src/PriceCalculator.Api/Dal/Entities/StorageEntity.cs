@@ -3,5 +3,6 @@
 public record StorageEntity(
     double Volume,
     double Price,
-    DateTime At
+    DateTime At,
+    double Weight
     );
