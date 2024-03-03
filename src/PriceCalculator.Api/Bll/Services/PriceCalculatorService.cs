@@ -10,6 +10,7 @@ public class PriceCalculatorService : IPriceCalculatorService
     private readonly IStorageRepository _storageRepository;
     
     private const double _volumeRatio = 3.27d;
+    private const double _weightRatio = 1.34d;
 
     public PriceCalculatorService(
         IStorageRepository storageRepository)
@@ -19,23 +20,45 @@ public class PriceCalculatorService : IPriceCalculatorService
     
     public double CalculatePrice(GoodModel[] goods)
     {
-        var volume = goods
-            .Sum(x => x.Height * x.Length * x.Width);
+        if (!goods.Any()) throw new ArgumentException("Список не может быть пустым!");
+        
+        var volumePrice = CalculatePriceByVolume(goods, out var volume);
+        var weightPrice = CalculatePriceByWeight(goods, out var weight);
+        
+        
 
-        var volumePrice = volume * _volumeRatio;
+        var resultPrice = Math.Max(volumePrice, weightPrice);
         
         _storageRepository.Save(new StorageEntity(
             volume,
-            volumePrice,
-            DateTime.UtcNow
+            resultPrice,
+            DateTime.UtcNow,
+            weight
             ));
 
-        return volumePrice;
+        return resultPrice;
 
+    }
+
+    private static double CalculatePriceByVolume(GoodModel[] goods, out double volume)
+    {
+        volume = goods
+            .Sum(x => x.Height * x.Length * x.Width / 1000);
+
+        return volume * _volumeRatio;
+    }
+    
+    private static double CalculatePriceByWeight(GoodModel[] goods, out double weight)
+    {
+        weight = goods.Sum(x => x.Weight / 1000);
+
+        return weight * _weightRatio;
     }
 
     public CalculationLogModel[] QueryLog(int take)
     {
+        if (take <= 0) throw new ArgumentOutOfRangeException(nameof(take), take, "Take должно быть больше 0");
+        
         var log = _storageRepository.Query()
             .OrderByDescending(x => x.At)
             .Take(take)
@@ -44,7 +67,8 @@ public class PriceCalculatorService : IPriceCalculatorService
         return log
             .Select(x => new CalculationLogModel(
                 x.Volume, 
-                x.Price))
+                x.Price,
+                x.Weight))
             .ToArray();
     }
 }
