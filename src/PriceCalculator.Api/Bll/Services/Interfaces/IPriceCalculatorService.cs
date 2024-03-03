@@ -4,6 +4,6 @@ namespace PriceCalculator.Api.Bll.Services.Interfaces;
 
 public interface IPriceCalculatorService
 {
-    double CalculatePrice(GoodModel[] goods);
+    double CalculatePrice(IReadOnlyList<GoodModel> goods);
     CalculationLogModel[] QueryLog(int take);
 }

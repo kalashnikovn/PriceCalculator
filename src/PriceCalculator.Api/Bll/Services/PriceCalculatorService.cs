@@ -18,7 +18,7 @@ public class PriceCalculatorService : IPriceCalculatorService
         _storageRepository = storageRepository;
     }
     
-    public double CalculatePrice(GoodModel[] goods)
+    public double CalculatePrice(IReadOnlyList<GoodModel> goods)
     {
         if (!goods.Any()) throw new ArgumentException("Список не может быть пустым!");
         
@@ -40,7 +40,7 @@ public class PriceCalculatorService : IPriceCalculatorService
 
     }
 
-    private static double CalculatePriceByVolume(GoodModel[] goods, out double volume)
+    private static double CalculatePriceByVolume(IReadOnlyList<GoodModel> goods, out double volume)
     {
         volume = goods
             .Sum(x => x.Height * x.Length * x.Width / 1000);
@@ -48,7 +48,7 @@ public class PriceCalculatorService : IPriceCalculatorService
         return volume * _volumeRatio;
     }
     
-    private static double CalculatePriceByWeight(GoodModel[] goods, out double weight)
+    private static double CalculatePriceByWeight(IReadOnlyList<GoodModel> goods, out double weight)
     {
         weight = goods.Sum(x => x.Weight / 1000);
 

@@ -5,5 +5,5 @@ namespace PriceCalculator.Api.Dal.Repositories.Interfaces;
 public interface IStorageRepository
 {
     void Save(StorageEntity entity);
-    StorageEntity[] Query();
+    IReadOnlyList<StorageEntity> Query();
 }
