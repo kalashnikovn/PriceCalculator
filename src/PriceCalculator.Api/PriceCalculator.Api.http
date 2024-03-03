@@ -1,0 +1,6 @@
+@PriceCalculator.Api_HostAddress = http://localhost:5075
+
+GET {{PriceCalculator.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
