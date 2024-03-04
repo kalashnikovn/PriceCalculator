@@ -1,4 +1,5 @@
-﻿using PriceCalculator.Api.Bll.Models;
+﻿using PriceCalculator.Api.Bll.Models.Analytics;
+using PriceCalculator.Api.Bll.Models.PriceCalculator;
 
 namespace PriceCalculator.Api.Bll.Services.Interfaces;
 
@@ -8,4 +9,5 @@ public interface IPriceCalculatorService
     CalculationLogModel[] QueryLog(int take);
     decimal CalculatePrice(IReadOnlyList<GoodModel> goods, decimal distance);
     void DeleteHistory();
+    ReportModel GetReport();
 }
