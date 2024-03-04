@@ -1,4 +1,5 @@
-﻿using PriceCalculator.Api.Bll.Models;
+﻿using PriceCalculator.Api.Bll.Models.Analytics;
+using PriceCalculator.Api.Bll.Models.PriceCalculator;
 using PriceCalculator.Api.Bll.Services.Interfaces;
 using PriceCalculator.Api.Dal.Entities;
 using PriceCalculator.Api.Dal.Repositories.Interfaces;
@@ -90,4 +91,61 @@ public class PriceCalculatorService : IPriceCalculatorService
     {
         _storageRepository.Clear();
     }
+
+
+    public ReportModel GetReport()
+    {
+        var storage = _storageRepository.Query().ToArray();
+
+        var maxWeight = GetMaxWeight(storage);
+        var maxVolume = GetMaxVolume(storage);
+
+        var maxDistanceForHeaviestGood = GetMaxDistanceForHeaviestGood(storage, maxWeight);
+        var maxDistanceForLargestGood = GetMaxDistanceForLargestGood(storage, maxVolume);
+
+        var wavgPrice = GetWavgPrice(storage);
+        
+        return new ReportModel(
+            maxWeight,
+            maxVolume,
+            maxDistanceForHeaviestGood,
+            maxDistanceForLargestGood,
+            wavgPrice
+            );
+    }
+    
+    private static decimal GetMaxWeight(StorageEntity[] goods)
+    {
+        return goods.Max(x => x.Weight);
+    }
+    
+    private static decimal GetMaxVolume(StorageEntity[] goods)
+    {
+        return goods.Max(x => x.Volume);
+    }
+
+    private static decimal GetMaxDistanceForHeaviestGood(StorageEntity[] goods, decimal maxWeight)
+    {
+        var distancesForHeaviestGood = goods
+            .Where(x => x.Weight == maxWeight)
+            .Select(x => x.Distance);
+
+        return distancesForHeaviestGood.Max();
+    }
+
+    private static decimal GetMaxDistanceForLargestGood(StorageEntity[] goods, decimal maxVolume)
+    {
+        var distancesForLargestGood = goods
+            .Where(x => x.Volume == maxVolume)
+            .Select(x => x.Distance);
+
+        return distancesForLargestGood.Max();
+    }
+
+    private static decimal GetWavgPrice(StorageEntity[] goods)
+    {
+        var fullPrice = goods.Sum(x => x.Price);
+        return fullPrice / goods.Length;
+    }
+    
 }
