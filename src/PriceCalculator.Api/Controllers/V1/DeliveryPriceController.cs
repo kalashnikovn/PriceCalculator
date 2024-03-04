@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PriceCalculator.Api.Bll.Models;
+using PriceCalculator.Api.Bll.Models.PriceCalculator;
 using PriceCalculator.Api.Bll.Services.Interfaces;
 using PriceCalculator.Api.Requests.V1;
 using PriceCalculator.Api.Responses.V1;
@@ -48,6 +48,21 @@ public class DeliveryPriceController : ControllerBase
     public void DeleteHistory()
     {
         _priceCalculatorService.DeleteHistory();
+    }
+
+    [HttpPost("reports/01")]
+    public ReportResponse Report()
+    {
+        var report = _priceCalculatorService.GetReport();
+        
+        return new ReportResponse(
+            report.MaxWeight,
+            report.MaxVolume,
+            report.MaxDistanceForHeaviestGood,
+            report.MaxDistanceForLargestGood,
+            report.WavgPrice
+        );
+
     }
     
 }

@@ -1,3 +1,4 @@
+using System.Text.Json;
 using PriceCalculator.Api.Bll.Services;
 using PriceCalculator.Api.Bll.Services.Interfaces;
 using PriceCalculator.Api.Dal.Repositories;
@@ -7,7 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(o =>
+{
+    o.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower;
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(o =>
 {
