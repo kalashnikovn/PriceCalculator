@@ -73,6 +73,11 @@ public class Startup
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
+            endpoints.MapControllerRoute("goods-page", "goods-page", new
+            {
+                Controller = "GoodsView",
+                Action = "Index"
+            });
         });
     }
 }
