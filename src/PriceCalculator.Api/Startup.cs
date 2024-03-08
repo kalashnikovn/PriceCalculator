@@ -46,6 +46,12 @@ public class Startup
         }
 
         app.UseRouting();
+        
+        app.Use(async (context, next) =>
+        {
+            context.Request.EnableBuffering();
+            await next.Invoke();
+        });
 
         app.UseEndpoints(endpoints =>
         {
