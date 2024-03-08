@@ -31,6 +31,8 @@ public class Startup
         services.AddHostedService<GoodsSyncHostedService>();
         services.AddScoped<IPriceCalculatorService, PriceCalculatorService>();
         services.AddSingleton<IStorageRepository, StorageRepository>();
+        services.AddSingleton<IGoodsRepository, GoodsRepository>();
+        services.AddScoped<IGoodsService, GoodsService>();
     }
 
     public void Configure(
