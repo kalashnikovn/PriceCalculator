@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using PriceCalculator.Api.Bll.Models.PriceCalculator;
 using PriceCalculator.Api.Bll.Services.Interfaces;
 using PriceCalculator.Api.Dal.Entities;
@@ -11,13 +12,16 @@ namespace PriceCalculator.Api.Controllers.V1;
 [Route("goods")]
 public class GoodsController : Controller
 {
+    private readonly IGoodsFullPriceService _goodsFullPriceService;
     private readonly IGoodsRepository _repository;
     private readonly ILogger<GoodsController> _logger;
 
     public GoodsController(
+        IGoodsFullPriceService goodsFullPriceService,
         IGoodsRepository repository,
         ILogger<GoodsController> logger)
     {
+        _goodsFullPriceService = goodsFullPriceService;
         _repository = repository;
         _logger = logger;
     }
@@ -46,5 +50,19 @@ public class GoodsController : Controller
         return new CalculateResponse(price);
     }
     
+    [HttpPost("calculate-full/{id}")]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    public IActionResult CalculateFullPrice(
+        int id
+    )
+    {
+        var fullPrice = _goodsFullPriceService.GetFullPrice(id);
+        return Ok(new
+        {
+            Price = fullPrice,
+            Id = id
+        });
+
+    }
     
 }

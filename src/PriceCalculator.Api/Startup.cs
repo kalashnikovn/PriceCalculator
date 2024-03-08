@@ -48,6 +48,7 @@ public class Startup
         services.AddSingleton<IStorageRepository, StorageRepository>();
         services.AddSingleton<IGoodsRepository, GoodsRepository>();
         services.AddScoped<IGoodsService, GoodsService>();
+        services.AddScoped<IGoodsFullPriceService, GoodsFullPriceService>();
     }
 
     public void Configure(
@@ -68,6 +69,7 @@ public class Startup
             await next.Invoke();
         });
 
+        app.UseMiddleware<LogMiddleware>();
         app.UseMiddleware<ErrorMiddleware>();
 
         app.UseEndpoints(endpoints =>
