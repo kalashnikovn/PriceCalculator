@@ -1,4 +1,5 @@
-﻿using PriceCalculator.Api.Bll.Models.Analytics;
+﻿using Microsoft.Extensions.Options;
+using PriceCalculator.Api.Bll.Models.Analytics;
 using PriceCalculator.Api.Bll.Models.PriceCalculator;
 using PriceCalculator.Api.Bll.Services.Interfaces;
 using PriceCalculator.Api.Dal.Entities;
@@ -11,15 +12,18 @@ public class PriceCalculatorService : IPriceCalculatorService
     private readonly IStorageRepository _storageRepository;
     
     // Коэффициент для объема за 1 куб. метр
-    private const decimal _volumeRatio = 3.27m * 1_000_000;
+    private decimal _volumeRatio;
     
     // Коэффициент для веса за 1кг
-    private const decimal _weightRatio = 1.34m ;
+    private decimal _weightRatio;
 
     public PriceCalculatorService(
+        IOptionsSnapshot<PriceCalculatorOptions> options,
         IStorageRepository storageRepository)
     {
         _storageRepository = storageRepository;
+        _volumeRatio = options.Value.VolumeToPriceRatio * 1_000_000;
+        _weightRatio = options.Value.WeightToPriceRatio;
     }
     
     /// <summary>
@@ -33,7 +37,7 @@ public class PriceCalculatorService : IPriceCalculatorService
         return CalculatePrice(goods, 1000);
     }
 
-    private static decimal CalculatePriceByVolume(IReadOnlyList<GoodModel> goods, out decimal volume)
+    private decimal CalculatePriceByVolume(IReadOnlyList<GoodModel> goods, out decimal volume)
     {
         volume = goods
             .Sum(x => x.Height * x.Length * x.Width);
@@ -41,7 +45,7 @@ public class PriceCalculatorService : IPriceCalculatorService
         return volume * _volumeRatio;
     }
     
-    private static decimal CalculatePriceByWeight(IReadOnlyList<GoodModel> goods, out decimal weight)
+    private decimal CalculatePriceByWeight(IReadOnlyList<GoodModel> goods, out decimal weight)
     {
         weight = goods.Sum(x => x.Weight);
 
