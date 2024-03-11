@@ -24,10 +24,7 @@ public sealed class Startup
             .AddMvcOptions(ConfigureMvc)
             .Services
             .AddEndpointsApiExplorer()
-            .AddSwaggerGen(o =>
-            {
-                o.CustomSchemaIds(x => x.FullName);
-            })
+            .AddSwaggerGen(o => o.CustomSchemaIds(x => x.FullName))
             .AddHostedService<GoodsSyncHostedService>()
             .AddHttpContextAccessor();
     }

@@ -74,7 +74,7 @@ internal class PriceCalculatorService : IPriceCalculatorService
         out decimal volume)
     {
         volume = goods
-            .Select(x => x.Height * x.Width * x.Height / 1000)
+            .Select(x => x.Height * x.Width * x.Length / 1000)
             .Sum();
 
         return volume * _volumeToPriceRatio;
