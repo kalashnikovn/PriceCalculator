@@ -1,7 +1,9 @@
-﻿using PriceCalculator.Domain.Entities;
+﻿using FluentValidation;
+using PriceCalculator.Domain.Entities;
 using PriceCalculator.Domain.Models.PriceCalculator;
 using PriceCalculator.Domain.Separated;
 using PriceCalculator.Domain.Services.Interfaces;
+using PriceCalculator.Domain.Validators;
 
 namespace PriceCalculator.Domain.Services;
 
@@ -25,10 +27,8 @@ internal class PriceCalculatorService : IPriceCalculatorService
     
     public decimal CalculatePrice(IReadOnlyList<GoodModel> goods)
     {
-        if (!goods.Any())
-        {
-            throw new ArgumentOutOfRangeException(nameof(goods));
-        }
+        var validator = new GoodsValidator();
+        validator.ValidateAndThrow(goods);
 
         var volumePrice = CalculatePriceByVolume(goods, out var volume);
         var weightPrice = CalculatePriceByWeight(goods, out var weight);
@@ -49,24 +49,10 @@ internal class PriceCalculatorService : IPriceCalculatorService
     {
         var goods = request.Goods;
 
-        if (!goods.Any())
-        {
-            throw new ArgumentOutOfRangeException(nameof(goods));
-        }
-
-        var volumePrice = CalculatePriceByVolume(goods, out var volume);
-        var weightPrice = CalculatePriceByWeight(goods, out var weight);
-
-        var resultPrice = ApplyDistanceToPrice(Math.Max(volumePrice, weightPrice), request.Distance);
-
-        _storageRepository.Save(new StorageEntity(
-            DateTime.UtcNow,
-            volume,
-            weight,
-            request.Distance,
-            resultPrice));
+        var resultPrice = CalculatePrice(goods);
+        var resultPriceWithDistance = ApplyDistanceToPrice(resultPrice, request.Distance);
         
-        return resultPrice;
+        return resultPriceWithDistance;
     }
     
     private decimal CalculatePriceByVolume(

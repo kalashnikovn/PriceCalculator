@@ -1,8 +1,6 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PriceCalculator.Api.Requests.V2;
 using PriceCalculator.Api.Responses.V2;
-using PriceCalculator.Api.Validators;
 using PriceCalculator.Domain.Models.PriceCalculator;
 using PriceCalculator.Domain.Services.Interfaces;
 
@@ -30,11 +28,8 @@ public class V2DeliveryPriceController : Controller
     /// </summary>
     /// <returns></returns>
     [HttpPost("calculate")]
-    public async Task<CalculateResponse> Calculate(CalculateRequest request)
+    public CalculateResponse Calculate(CalculateRequest request)
     {
-        var validator = new CalculateRequestValidator();
-        await validator.ValidateAndThrowAsync(request);
-
         var price = _priceCalculatorService.CalculatePrice(
             request.Goods
                 .Select(x => new GoodModel(

@@ -1,14 +1,14 @@
 ﻿using FluentValidation;
-using PriceCalculator.Api.Requests.V2;
+using PriceCalculator.Domain.Models.PriceCalculator;
 
-namespace PriceCalculator.Api.Validators;
+namespace PriceCalculator.Domain.Validators;
 
-public class GoodPropertiesValidator : AbstractValidator<GoodProperties>
+public sealed class GoodModelValidator : AbstractValidator<GoodModel>
 {
-    public GoodPropertiesValidator()
+    public GoodModelValidator()
     {
         RuleFor(x => x.Weight)
-            .GreaterThan(0)
+            .GreaterThanOrEqualTo(0)
             .LessThan(Int32.MaxValue);
         
         RuleFor(x => x.Height)
