@@ -2,7 +2,7 @@
 
 public record CalculationLogModel(
     decimal Volume,
-    decimal Price,
     decimal Weight,
-    decimal Distance
+    decimal Distance,
+    decimal Price
     );

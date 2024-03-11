@@ -1,32 +1,25 @@
-﻿using System.Net;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PriceCalculator.Api.Bll.Models.PriceCalculator;
 using PriceCalculator.Api.Bll.Services.Interfaces;
 using PriceCalculator.Api.Dal.Entities;
 using PriceCalculator.Api.Dal.Repositories.Interfaces;
 using PriceCalculator.Api.Responses.V2;
 
-namespace PriceCalculator.Api.Controllers.V1;
+namespace PriceCalculator.Api.Controllers;
 
 [ApiController]
 [Route("goods")]
-public class GoodsController : Controller
+public class V1GoodsController : Controller
 {
-    private readonly IGoodsFullPriceService _goodsFullPriceService;
     private readonly IGoodsRepository _repository;
-    private readonly ILogger<GoodsController> _logger;
 
-    public GoodsController(
-        IGoodsFullPriceService goodsFullPriceService,
-        IGoodsRepository repository,
-        ILogger<GoodsController> logger)
+    public V1GoodsController(
+        IGoodsRepository repository)
     {
-        _goodsFullPriceService = goodsFullPriceService;
         _repository = repository;
-        _logger = logger;
     }
     
-    [HttpGet("all")]
+    [HttpGet]
     public ICollection<GoodEntity> GetAll()
     {
         return _repository.GetAll();
@@ -37,8 +30,6 @@ public class GoodsController : Controller
         [FromServices] IPriceCalculatorService priceCalculatorService,
         int id)
     {
-        _logger.LogInformation(HttpContext.Request.Path);
-        
         var good = _repository.Get(id);
         var model = new GoodModel(
             good.Height,
@@ -49,20 +40,4 @@ public class GoodsController : Controller
         var price = priceCalculatorService.CalculatePrice(new []{ model });
         return new CalculateResponse(price);
     }
-    
-    [HttpPost("calculate-full/{id}")]
-    [ProducesResponseType((int)HttpStatusCode.OK)]
-    public IActionResult CalculateFullPrice(
-        int id
-    )
-    {
-        var fullPrice = _goodsFullPriceService.GetFullPrice(id);
-        return Ok(new
-        {
-            Price = fullPrice,
-            Id = id
-        });
-
-    }
-    
 }

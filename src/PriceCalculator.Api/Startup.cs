@@ -7,17 +7,14 @@ using PriceCalculator.Api.Bll.Services.Interfaces;
 using PriceCalculator.Api.Dal.Repositories;
 using PriceCalculator.Api.Dal.Repositories.Interfaces;
 using PriceCalculator.Api.HostedServices;
-using PriceCalculator.Api.Middlewares;
 
 namespace PriceCalculator.Api;
 
-public class Startup
+public sealed class Startup
 {
     private readonly IConfiguration _configuration;
 
-    public Startup(
-        IConfiguration configuration
-        )
+    public Startup(IConfiguration configuration)
     {
         _configuration = configuration;
     }
@@ -28,58 +25,41 @@ public class Startup
             .AddMvcOptions(x =>
             {
                 x.Filters.Add(new ExceptionFilterAttribute());
-                
                 x.Filters.Add(new ResponseTypeAttribute((int)HttpStatusCode.InternalServerError));
                 x.Filters.Add(new ResponseTypeAttribute((int)HttpStatusCode.BadRequest));
                 x.Filters.Add(new ProducesResponseTypeAttribute((int)HttpStatusCode.OK));
             });
         
-        
         services.Configure<PriceCalculatorOptions>(_configuration.GetSection("PriceCalculatorOptions"));
-        services.Configure<GoodsServiceOptions>(_configuration.GetSection("GoodsServiceOptions"));
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(o =>
         {
             o.CustomSchemaIds(x => x.FullName);
         });
-        services.AddHostedService<GoodsSyncHostedService>();
+        
         services.AddScoped<IPriceCalculatorService, PriceCalculatorService>();
+        services.AddScoped<IGoodPriceCalculatorService, GoodPriceCalculatorService>();
+        services.AddHostedService<GoodsSyncHostedService>();
         services.AddSingleton<IStorageRepository, StorageRepository>();
         services.AddSingleton<IGoodsRepository, GoodsRepository>();
         services.AddScoped<IGoodsService, GoodsService>();
-        services.AddScoped<IGoodsFullPriceService, GoodsFullPriceService>();
+        services.AddHttpContextAccessor();
     }
 
     public void Configure(
         IHostEnvironment environment,
         IApplicationBuilder app)
     {
-        if (environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
         app.UseRouting();
-        
-        app.Use(async (context, next) =>
-        {
-            context.Request.EnableBuffering();
-            await next.Invoke();
-        });
-
-        app.UseMiddleware<LogMiddleware>();
-        app.UseMiddleware<ErrorMiddleware>();
 
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
-            endpoints.MapControllerRoute("goods-page", "goods-page", new
-            {
-                Controller = "GoodsView",
-                Action = "Index"
-            });
         });
     }
 }

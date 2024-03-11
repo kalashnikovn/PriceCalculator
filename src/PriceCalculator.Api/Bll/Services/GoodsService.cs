@@ -1,7 +1,6 @@
-﻿using PriceCalculator.Api.Bll.Models.Goods;
+﻿using PriceCalculator.Api.Bll.Models.PriceCalculator;
 using PriceCalculator.Api.Bll.Services.Interfaces;
 using PriceCalculator.Api.Dal.Entities;
-using PriceCalculator.Api.Dal.Repositories.Interfaces;
 
 namespace PriceCalculator.Api.Bll.Services;
 
@@ -36,4 +35,13 @@ public class GoodsService : IGoodsService
         }
         
     }
+    
+    private record GoodModel(
+        string Name,
+        int Id,
+        int Height,
+        int Length,
+        int Width,
+        int Weight,
+        decimal Price);
 }

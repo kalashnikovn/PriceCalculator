@@ -1,9 +1,9 @@
 ﻿namespace PriceCalculator.Api.Dal.Entities;
 
 public record StorageEntity(
-    decimal Volume,
-    decimal Price,
     DateTime At,
+    decimal Volume,
     decimal Weight,
-    decimal Distance
+    decimal Distance,
+    decimal Price
     );
