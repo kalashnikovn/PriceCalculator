@@ -1,7 +1,7 @@
 ﻿using PriceCalculator.Domain.Entities;
 using PriceCalculator.Domain.Services.Interfaces;
 
-namespace PriceCalculator.Domain.Services;
+namespace PriceCalculator.Infrastructure.External;
 
 public class GoodsService : IGoodsService
 {

@@ -1,8 +1,7 @@
-﻿
-using PriceCalculator.Domain.Entities;
+﻿using PriceCalculator.Domain.Entities;
 using PriceCalculator.Domain.Separated;
 
-namespace PriceCalculator.Api.Dal.Repositories;
+namespace PriceCalculator.Infrastructure.Dal.Repositories;
 
 public class GoodsRepository : IGoodsRepository
 {
