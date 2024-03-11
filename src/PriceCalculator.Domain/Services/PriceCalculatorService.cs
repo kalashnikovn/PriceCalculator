@@ -5,7 +5,7 @@ using PriceCalculator.Domain.Services.Interfaces;
 
 namespace PriceCalculator.Domain.Services;
 
-public class PriceCalculatorService : IPriceCalculatorService
+internal class PriceCalculatorService : IPriceCalculatorService
 {
     private readonly decimal _volumeToPriceRatio;
     private readonly decimal _weightToPriceRatio;

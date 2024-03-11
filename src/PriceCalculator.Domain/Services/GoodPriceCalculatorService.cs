@@ -4,7 +4,7 @@ using PriceCalculator.Domain.Services.Interfaces;
 
 namespace PriceCalculator.Domain.Services;
 
-public sealed class GoodPriceCalculatorService : IGoodPriceCalculatorService
+internal sealed class GoodPriceCalculatorService : IGoodPriceCalculatorService
 {
     private readonly IGoodsRepository _goodsRepository;
     private readonly IPriceCalculatorService _priceCalculatorService;
