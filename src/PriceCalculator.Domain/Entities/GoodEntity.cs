@@ -1,4 +1,4 @@
-﻿namespace PriceCalculator.Api.Dal.Entities;
+﻿namespace PriceCalculator.Domain.Entities;
 
 public record GoodEntity(
     string Name,

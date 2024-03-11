@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using PriceCalculator.Api.Bll.Models.PriceCalculator;
-using PriceCalculator.Api.Bll.Services.Interfaces;
 using PriceCalculator.Api.Requests.V2;
 using PriceCalculator.Api.Responses.V2;
 using PriceCalculator.Api.Validators;
+using PriceCalculator.Domain.Models.PriceCalculator;
+using PriceCalculator.Domain.Services.Interfaces;
 
 namespace PriceCalculator.Api.Controllers;
 

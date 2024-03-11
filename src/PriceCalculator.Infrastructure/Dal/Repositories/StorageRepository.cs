@@ -1,5 +1,6 @@
-﻿using PriceCalculator.Api.Dal.Entities;
-using PriceCalculator.Api.Dal.Repositories.Interfaces;
+﻿
+using PriceCalculator.Domain.Entities;
+using PriceCalculator.Domain.Separated;
 
 namespace PriceCalculator.Api.Dal.Repositories;
 

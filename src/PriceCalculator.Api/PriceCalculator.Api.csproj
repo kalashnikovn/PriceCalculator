@@ -15,4 +15,8 @@
     <_ContentIncludedByDefault Remove="Views\GoodsPageView.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PriceCalculator.Infrastructure\PriceCalculator.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

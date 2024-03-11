@@ -1,12 +1,13 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using PriceCalculator.Api.ActionFilters;
-using PriceCalculator.Api.Bll;
-using PriceCalculator.Api.Bll.Services;
-using PriceCalculator.Api.Bll.Services.Interfaces;
 using PriceCalculator.Api.Dal.Repositories;
-using PriceCalculator.Api.Dal.Repositories.Interfaces;
 using PriceCalculator.Api.HostedServices;
+using PriceCalculator.Domain;
+using PriceCalculator.Domain.Separated;
+using PriceCalculator.Domain.Services;
+using PriceCalculator.Domain.Services.Interfaces;
 
 namespace PriceCalculator.Api;
 
@@ -38,7 +39,14 @@ public sealed class Startup
             o.CustomSchemaIds(x => x.FullName);
         });
         
-        services.AddScoped<IPriceCalculatorService, PriceCalculatorService>();
+        services.AddScoped<IPriceCalculatorService, PriceCalculatorService>(x =>
+        {
+            var options = x.GetRequiredService<IOptionsSnapshot<PriceCalculatorOptions>>().Value;
+            var repository = x.GetRequiredService<IStorageRepository>();
+            return new PriceCalculatorService(options, repository);
+        });
+        
+        
         services.AddScoped<IGoodPriceCalculatorService, GoodPriceCalculatorService>();
         services.AddHostedService<GoodsSyncHostedService>();
         services.AddSingleton<IStorageRepository, StorageRepository>();

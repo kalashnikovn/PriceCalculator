@@ -1,6 +1,6 @@
-﻿using PriceCalculator.Api.Bll.Models.PriceCalculator;
+﻿using PriceCalculator.Domain.Models.PriceCalculator;
 
-namespace PriceCalculator.Api.Bll.Services.Interfaces;
+namespace PriceCalculator.Domain.Services.Interfaces;
 
 public interface IPriceCalculatorService
 {

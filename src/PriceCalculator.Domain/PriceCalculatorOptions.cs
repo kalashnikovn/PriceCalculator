@@ -1,4 +1,4 @@
-﻿namespace PriceCalculator.Api.Bll;
+﻿namespace PriceCalculator.Domain;
 
 public class PriceCalculatorOptions
 {

@@ -1,7 +1,5 @@
-﻿using Microsoft.Extensions.Options;
-using PriceCalculator.Api.Bll;
-using PriceCalculator.Api.Bll.Services.Interfaces;
-using PriceCalculator.Api.Dal.Repositories.Interfaces;
+﻿using PriceCalculator.Domain.Separated;
+using PriceCalculator.Domain.Services.Interfaces;
 
 namespace PriceCalculator.Api.HostedServices;
 

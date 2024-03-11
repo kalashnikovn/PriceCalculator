@@ -1,4 +1,4 @@
-﻿namespace PriceCalculator.Api.Bll.Models.PriceCalculator;
+﻿namespace PriceCalculator.Domain.Models.PriceCalculator;
 
 public record CalculationLogModel(
     decimal Volume,

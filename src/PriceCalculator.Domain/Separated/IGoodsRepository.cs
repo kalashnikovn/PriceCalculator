@@ -1,6 +1,6 @@
-﻿using PriceCalculator.Api.Dal.Entities;
+﻿using PriceCalculator.Domain.Entities;
 
-namespace PriceCalculator.Api.Dal.Repositories.Interfaces;
+namespace PriceCalculator.Domain.Separated;
 
 public interface IGoodsRepository
 {

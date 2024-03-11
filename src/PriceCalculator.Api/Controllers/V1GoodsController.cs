@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PriceCalculator.Api.Bll.Models.PriceCalculator;
-using PriceCalculator.Api.Bll.Services.Interfaces;
-using PriceCalculator.Api.Dal.Entities;
-using PriceCalculator.Api.Dal.Repositories.Interfaces;
 using PriceCalculator.Api.Responses.V2;
+using PriceCalculator.Domain.Entities;
+using PriceCalculator.Domain.Models.PriceCalculator;
+using PriceCalculator.Domain.Separated;
+using PriceCalculator.Domain.Services.Interfaces;
 
 namespace PriceCalculator.Api.Controllers;
 

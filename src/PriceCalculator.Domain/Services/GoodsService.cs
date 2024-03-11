@@ -1,8 +1,7 @@
-﻿using PriceCalculator.Api.Bll.Models.PriceCalculator;
-using PriceCalculator.Api.Bll.Services.Interfaces;
-using PriceCalculator.Api.Dal.Entities;
+﻿using PriceCalculator.Domain.Entities;
+using PriceCalculator.Domain.Services.Interfaces;
 
-namespace PriceCalculator.Api.Bll.Services;
+namespace PriceCalculator.Domain.Services;
 
 public class GoodsService : IGoodsService
 {

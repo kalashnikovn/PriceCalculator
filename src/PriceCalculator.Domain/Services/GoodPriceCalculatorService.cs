@@ -1,8 +1,8 @@
-﻿using PriceCalculator.Api.Bll.Models.PriceCalculator;
-using PriceCalculator.Api.Bll.Services.Interfaces;
-using PriceCalculator.Api.Dal.Repositories.Interfaces;
+﻿using PriceCalculator.Domain.Models.PriceCalculator;
+using PriceCalculator.Domain.Separated;
+using PriceCalculator.Domain.Services.Interfaces;
 
-namespace PriceCalculator.Api.Bll.Services;
+namespace PriceCalculator.Domain.Services;
 
 public sealed class GoodPriceCalculatorService : IGoodPriceCalculatorService
 {

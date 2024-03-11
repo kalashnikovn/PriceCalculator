@@ -1,10 +1,9 @@
-﻿using Microsoft.Extensions.Options;
-using PriceCalculator.Api.Bll.Models.PriceCalculator;
-using PriceCalculator.Api.Bll.Services.Interfaces;
-using PriceCalculator.Api.Dal.Entities;
-using PriceCalculator.Api.Dal.Repositories.Interfaces;
+﻿using PriceCalculator.Domain.Entities;
+using PriceCalculator.Domain.Models.PriceCalculator;
+using PriceCalculator.Domain.Separated;
+using PriceCalculator.Domain.Services.Interfaces;
 
-namespace PriceCalculator.Api.Bll.Services;
+namespace PriceCalculator.Domain.Services;
 
 public class PriceCalculatorService : IPriceCalculatorService
 {
@@ -16,11 +15,11 @@ public class PriceCalculatorService : IPriceCalculatorService
     
 
     public PriceCalculatorService(
-        IOptionsSnapshot<PriceCalculatorOptions> options,
+        PriceCalculatorOptions options,
         IStorageRepository storageRepository)
     {
-        _weightToPriceRatio = options.Value.WeightToPriceRatio;
-        _volumeToPriceRatio = options.Value.VolumeToPriceRatio;
+        _weightToPriceRatio = options.WeightToPriceRatio;
+        _volumeToPriceRatio = options.VolumeToPriceRatio;
         _storageRepository = storageRepository;
     }
     
