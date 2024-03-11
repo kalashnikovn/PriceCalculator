@@ -1,6 +1,22 @@
-﻿namespace PriceCalculator.Domain.Exceptions;
+﻿using System.Runtime.Serialization;
 
-internal sealed class DomainException
+namespace PriceCalculator.Domain.Exceptions;
+
+public sealed class DomainException : Exception
 {
-    
+    public DomainException()
+    {
+    }
+
+    public DomainException(SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+    }
+
+    public DomainException(string? message) : base(message)
+    {
+    }
+
+    public DomainException(string? message, Exception? innerException) : base(message, innerException)
+    {
+    }
 }

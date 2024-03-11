@@ -1,4 +1,5 @@
 ﻿using PriceCalculator.Domain.Entities;
+using PriceCalculator.Domain.Exceptions;
 using PriceCalculator.Domain.Separated;
 
 namespace PriceCalculator.Infrastructure.Dal.Repositories;
@@ -22,6 +23,14 @@ public class GoodsRepository : IGoodsRepository
 
     public GoodEntity Get(int id)
     {
-        return _store[id];
+        try
+        {
+            return _store[id];
+        }
+        catch (KeyNotFoundException e)
+        {
+            throw new EntityNotFoundException("Not found", e);
+        }
+        
     }
 }

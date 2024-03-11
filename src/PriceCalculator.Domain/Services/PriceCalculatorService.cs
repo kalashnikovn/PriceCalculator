@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using PriceCalculator.Domain.Entities;
+using PriceCalculator.Domain.Exceptions;
 using PriceCalculator.Domain.Models.PriceCalculator;
 using PriceCalculator.Domain.Separated;
 using PriceCalculator.Domain.Services.Interfaces;
@@ -24,8 +25,40 @@ internal class PriceCalculatorService : IPriceCalculatorService
         _volumeToPriceRatio = options.VolumeToPriceRatio;
         _storageRepository = storageRepository;
     }
-    
+
     public decimal CalculatePrice(IReadOnlyList<GoodModel> goods)
+    {
+        try
+        {
+            return CalculatePriceUnsafe(goods);
+        }
+        catch (ValidationException e)
+        {
+            throw new DomainException("Incorrect input", e);
+        }
+        catch (DivideByZeroException e)
+        {
+            throw new DomainException("Incorrect input", e);
+        }
+    }
+    
+    public decimal CalculatePrice(CalculateRequestModel request)
+    {
+        try
+        {
+            return CalculatePriceUnsafe(request);
+        }
+        catch (ValidationException e)
+        {
+            throw new DomainException("Incorrect input", e);
+        }
+        catch (DivideByZeroException e)
+        {
+            throw new DomainException("Incorrect input", e);
+        }
+    }
+    
+    private decimal CalculatePriceUnsafe(IReadOnlyList<GoodModel> goods)
     {
         var validator = new GoodsValidator();
         validator.ValidateAndThrow(goods);
@@ -45,14 +78,26 @@ internal class PriceCalculatorService : IPriceCalculatorService
         return resultPrice;
     }
     
-    public decimal CalculatePrice(CalculateRequestModel request)
+    private decimal CalculatePriceUnsafe(CalculateRequestModel request)
     {
         var goods = request.Goods;
 
-        var resultPrice = CalculatePrice(goods);
-        var resultPriceWithDistance = ApplyDistanceToPrice(resultPrice, request.Distance);
+        var validator = new GoodsValidator();
+        validator.ValidateAndThrow(goods);
+
+        var volumePrice = CalculatePriceByVolume(goods, out var volume);
+        var weightPrice = CalculatePriceByWeight(goods, out var weight);
+
+        var resultPrice = ApplyDistanceToPrice(Math.Max(volumePrice, weightPrice), request.Distance);
+
+        _storageRepository.Save(new StorageEntity(
+            DateTime.UtcNow,
+            volume,
+            weight,
+            request.Distance,
+            resultPrice));
         
-        return resultPriceWithDistance;
+        return resultPrice;
     }
     
     private decimal CalculatePriceByVolume(
