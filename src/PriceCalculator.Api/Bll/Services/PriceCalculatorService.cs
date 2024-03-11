@@ -19,8 +19,8 @@ public class PriceCalculatorService : IPriceCalculatorService
         IOptionsSnapshot<PriceCalculatorOptions> options,
         IStorageRepository storageRepository)
     {
-        _storageRepository = storageRepository;
         _weightToPriceRatio = options.Value.WeightToPriceRatio;
+        _volumeToPriceRatio = options.Value.VolumeToPriceRatio;
         _storageRepository = storageRepository;
     }
     
