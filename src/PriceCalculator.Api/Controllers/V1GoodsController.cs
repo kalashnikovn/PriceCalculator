@@ -37,7 +37,9 @@ public class V1GoodsController : Controller
             good.Width,
             good.Weight);
         
-        var price = priceCalculatorService.CalculatePrice(new []{ model });
+        var price = priceCalculatorService.CalculatePrice(
+            new CalculateRequestModel(new []{ model }, 0));
+        
         return new CalculateResponse(price);
     }
 }

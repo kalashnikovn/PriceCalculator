@@ -25,22 +25,6 @@ internal class PriceCalculatorService : IPriceCalculatorService
         _volumeToPriceRatio = options.VolumeToPriceRatio;
         _storageRepository = storageRepository;
     }
-
-    public decimal CalculatePrice(IReadOnlyList<GoodModel> goods)
-    {
-        try
-        {
-            return CalculatePriceUnsafe(goods);
-        }
-        catch (ValidationException e)
-        {
-            throw new DomainException("Incorrect input", e);
-        }
-        catch (DivideByZeroException e)
-        {
-            throw new DomainException("Incorrect input", e);
-        }
-    }
     
     public decimal CalculatePrice(CalculateRequestModel request)
     {
@@ -56,26 +40,6 @@ internal class PriceCalculatorService : IPriceCalculatorService
         {
             throw new DomainException("Incorrect input", e);
         }
-    }
-    
-    private decimal CalculatePriceUnsafe(IReadOnlyList<GoodModel> goods)
-    {
-        var validator = new GoodsValidator();
-        validator.ValidateAndThrow(goods);
-
-        var volumePrice = CalculatePriceByVolume(goods, out var volume);
-        var weightPrice = CalculatePriceByWeight(goods, out var weight);
-
-        var resultPrice = Math.Max(volumePrice, weightPrice);
-        
-        _storageRepository.Save(new StorageEntity(
-            DateTime.UtcNow,
-            volume,
-            weight,
-            0,
-            resultPrice));
-
-        return resultPrice;
     }
     
     private decimal CalculatePriceUnsafe(CalculateRequestModel request)

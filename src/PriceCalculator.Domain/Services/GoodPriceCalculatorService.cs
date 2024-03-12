@@ -22,8 +22,8 @@ internal sealed class GoodPriceCalculatorService : IGoodPriceCalculatorService
     public decimal CalculatePrice(int goodId, decimal distance)
     {
         var good = _goodsRepository.Get(goodId);
+        var goods = new[] { new GoodModel(good.Length, good.Width, good.Height, good.Weight) };
 
-        return _priceCalculatorService.CalculatePrice(new[]
-            { new GoodModel(good.Length, good.Width, good.Height, good.Weight) });
+        return _priceCalculatorService.CalculatePrice(new CalculateRequestModel(goods, distance));
     }
 }

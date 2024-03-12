@@ -23,7 +23,7 @@ public class V3DeliveryPriceController : ControllerBase
 
     [HttpPost("calculate")]
     public CalculateResponse Calculate(
-        Requests.V3.CalculateRequest request)
+        CalculateRequest request)
     {
         var price = _priceCalculatorService.CalculatePrice(
             new CalculateRequestModel(

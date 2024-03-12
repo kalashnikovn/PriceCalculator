@@ -26,14 +26,16 @@ public class V1DeliveryPriceController : ControllerBase
     public CalculateResponse Calculate(
         CalculateRequest request)
     {
-        var price = _priceCalculatorService.CalculatePrice(
-            request.Goods
-                .Select(x => new GoodModel(
-                    x.Height,
-                    x.Length,
-                    x.Width,
-                    0 /* для v1 рассчет по весу не предусмотрен */))
-                .ToArray());
+        var goods = request.Goods
+            .Select(x => new GoodModel(
+                x.Height,
+                x.Length,
+                x.Width,
+                0 /* для v1 рассчет по весу не предусмотрен */))
+            .ToArray();
+        
+        
+        var price = _priceCalculatorService.CalculatePrice(new CalculateRequestModel(goods, 0));
         
         return new CalculateResponse(price);
     }
