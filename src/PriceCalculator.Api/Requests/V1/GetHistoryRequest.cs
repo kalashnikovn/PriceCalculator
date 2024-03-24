@@ -1,5 +1,7 @@
 ﻿namespace PriceCalculator.Api.Requests.V1;
 
 public record GetHistoryRequest(
-    int Take
+    long UserId,
+    int Take,
+    int Skip
     );

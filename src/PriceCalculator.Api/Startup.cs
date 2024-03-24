@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using PriceCalculator.Api.ActionFilters;
-using PriceCalculator.Api.HostedServices;
 using PriceCalculator.Infrastructure;
 
 namespace PriceCalculator.Api;
@@ -24,8 +23,7 @@ public sealed class Startup
             .AddMvcOptions(ConfigureMvc)
             .Services
             .AddEndpointsApiExplorer()
-            .AddSwaggerGen(o => o.CustomSchemaIds(x => x.FullName))
-            .AddHostedService<GoodsSyncHostedService>()
+            .AddSwaggerGen(o => o.CustomSchemaIds(x => x.FullName?.Replace("+", ".")))
             .AddHttpContextAccessor();
     }
 

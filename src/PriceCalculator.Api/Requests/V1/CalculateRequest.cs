@@ -4,5 +4,12 @@
 /// Товары. чью цену транспортировки нужно расчитать
 /// </summary>
 public record CalculateRequest(
-    GoodProperties[] Goods
-    );
+    long UserId,
+    CalculateRequest.GoodProperties[] Goods)
+{
+    public record GoodProperties(
+        double Height,
+        double Length,
+        double Width,
+        double Weight);
+}
