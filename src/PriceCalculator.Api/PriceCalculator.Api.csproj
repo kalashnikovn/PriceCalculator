@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PriceCalculator.Bll\PriceCalculator.Bll.csproj" />
     <ProjectReference Include="..\PriceCalculator.Dal\PriceCalculator.Dal.csproj" />
   </ItemGroup>
 

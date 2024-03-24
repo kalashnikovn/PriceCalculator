@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PriceCalculator.Api.ActionFilters;
 using PriceCalculator.Api.NamingPolicies;
+using PriceCalculator.Bll.Extensions;
 using PriceCalculator.Dal.Extensions;
 
 namespace PriceCalculator.Api;
@@ -18,7 +19,7 @@ public sealed class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services
-            //.AddDomain(_configuration)
+            .AddBll()
             .AddDalInfrastructure(_configuration)
             .AddDalRepositories()
             .AddControllers()
