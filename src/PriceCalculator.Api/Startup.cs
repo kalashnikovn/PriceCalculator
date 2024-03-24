@@ -20,6 +20,7 @@ public sealed class Startup
         services
             //.AddDomain(_configuration)
             .AddDalInfrastructure(_configuration)
+            .AddDalRepositories()
             .AddControllers()
             .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamingPolicy())
             .AddMvcOptions(ConfigureMvc)

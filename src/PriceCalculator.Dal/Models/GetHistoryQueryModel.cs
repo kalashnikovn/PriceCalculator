@@ -2,5 +2,5 @@
 
 public record GetHistoryQueryModel(
     long UserId,
-    int Take,
+    int Limit,
     int Offset);
