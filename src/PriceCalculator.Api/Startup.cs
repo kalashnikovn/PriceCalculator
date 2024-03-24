@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using PriceCalculator.Api.ActionFilters;
 using PriceCalculator.Api.NamingPolicies;
@@ -24,12 +25,19 @@ public sealed class Startup
             .AddDalRepositories()
             .AddControllers()
             .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamingPolicy())
+            .AddFluentValidation(conf =>
+            {
+                conf.RegisterValidatorsFromAssembly(typeof(Program).Assembly);
+                conf.AutomaticValidationEnabled = true;
+            })
             //.AddMvcOptions(ConfigureMvc)
             .Services
             .AddEndpointsApiExplorer()
             .AddSwaggerGen(o => o.CustomSchemaIds(x => x.FullName?.Replace("+", ".")));
 
     }
+
+    
 
     private static void ConfigureMvc(MvcOptions x)
     {

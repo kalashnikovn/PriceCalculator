@@ -51,9 +51,6 @@ public sealed class DeliveryPricesController : ControllerBase
 
         var result = await _mediator.Send(command, cancellationToken);
 
-        var res = result.Items.Select(x => new GetHistoryResponse.CargoResponse(x.Volume, x.Weight, x.GoodIds))
-            .ToArray();
-
         return result.Items.Select(x =>
                 new GetHistoryResponse(
                     new GetHistoryResponse.CargoResponse(
