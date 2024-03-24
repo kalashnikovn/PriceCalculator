@@ -1,5 +1,6 @@
 ﻿using PriceCalculator.Bll.Commands;
 using PriceCalculator.Bll.Exceptions;
+using PriceCalculator.Bll.Queries;
 
 namespace PriceCalculator.Bll.Extensions;
 
