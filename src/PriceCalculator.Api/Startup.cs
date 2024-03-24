@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PriceCalculator.Api.ActionFilters;
 using PriceCalculator.Api.NamingPolicies;
+using PriceCalculator.Dal.Extensions;
 
 namespace PriceCalculator.Api;
 
@@ -18,14 +19,14 @@ public sealed class Startup
     {
         services
             //.AddDomain(_configuration)
-            //.AddInfrastructure()
+            .AddDalInfrastructure(_configuration)
             .AddControllers()
             .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamingPolicy())
             .AddMvcOptions(ConfigureMvc)
             .Services
             .AddEndpointsApiExplorer()
-            .AddSwaggerGen(o => o.CustomSchemaIds(x => x.FullName?.Replace("+", ".")))
-            .AddHttpContextAccessor();
+            .AddSwaggerGen(o => o.CustomSchemaIds(x => x.FullName?.Replace("+", ".")));
+
     }
 
     private static void ConfigureMvc(MvcOptions x)
