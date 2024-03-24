@@ -40,7 +40,7 @@ public sealed class DeliveryPricesController : ControllerBase
             result.Price);
     }
 
-    [HttpGet("get-history")]
+    [HttpPost("get-history")]
     public async Task<GetHistoryResponse[]> GetHistory(GetHistoryRequest request, CancellationToken cancellationToken)
     {
         var command = new GetCalculationHistoryQuery(

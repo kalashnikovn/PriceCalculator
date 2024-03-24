@@ -57,13 +57,13 @@ public sealed class CalculationService : ICalculationService
             Price = data.Price,
             TotalVolume = data.TotalVolume,
             TotalWeight = data.TotalWeight,
-            At = DateTimeOffset.Now
+            At = DateTimeOffset.UtcNow
         };
 
         using var transaction = _calculationsRepository.CreateTransactionScope();
-        var goodIds = await _goodsRepository.Add(goods, cancellationToken);
+        var goodsId = await _goodsRepository.Add(goods, cancellationToken);
 
-        calculation = calculation with { GoodsId = goodIds };
+        calculation = calculation with { GoodsId = goodsId };
         var calculationIds = await _calculationsRepository.Add(new[] { calculation }, cancellationToken);
         transaction.Complete();
 

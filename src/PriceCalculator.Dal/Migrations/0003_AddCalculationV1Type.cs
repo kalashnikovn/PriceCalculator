@@ -15,7 +15,7 @@ DO $$
             (
                   id           bigint
                 , user_id      bigint
-                , good_ids     bigint[]
+                , goods_id     bigint[]
                 , total_volume double precision
                 , total_weight double precision
                 , price        numeric(19, 5)

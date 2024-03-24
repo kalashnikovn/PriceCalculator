@@ -24,7 +24,7 @@ public sealed class Startup
             .AddDalRepositories()
             .AddControllers()
             .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamingPolicy())
-            .AddMvcOptions(ConfigureMvc)
+            //.AddMvcOptions(ConfigureMvc)
             .Services
             .AddEndpointsApiExplorer()
             .AddSwaggerGen(o => o.CustomSchemaIds(x => x.FullName?.Replace("+", ".")));
