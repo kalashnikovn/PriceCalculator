@@ -1,8 +1,6 @@
 ﻿using System.Net;
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using PriceCalculator.Domain.Exceptions;
 
 namespace PriceCalculator.Api.ActionFilters;
 
@@ -12,9 +10,9 @@ public class ExceptionFilterAttribute : Attribute, IExceptionFilter
     {
         switch (context.Exception)
         {
-            case DomainException exception:
-                HandleBadRequest(context, exception);
-                return;
+            // case DomainException exception:
+            //     HandleBadRequest(context, exception);
+            //     return;
                 
             default:
                 HandlerInternalError(context);

@@ -1,9 +1,7 @@
 ﻿using System.Net;
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using PriceCalculator.Api.ActionFilters;
 using PriceCalculator.Api.NamingPolicies;
-using PriceCalculator.Infrastructure;
 
 namespace PriceCalculator.Api;
 
@@ -19,8 +17,8 @@ public sealed class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services
-            .AddDomain(_configuration)
-            .AddInfrastructure()
+            //.AddDomain(_configuration)
+            //.AddInfrastructure()
             .AddControllers()
             .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamingPolicy())
             .AddMvcOptions(ConfigureMvc)
