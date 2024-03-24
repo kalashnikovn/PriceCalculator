@@ -6,8 +6,8 @@ public record GetHistoryResponse(
 )
 {
     public record CargoResponse(
-        decimal Volume,
-        decimal Weight,
+        double Volume,
+        double Weight,
         long[] GoodIds
     );
 }
