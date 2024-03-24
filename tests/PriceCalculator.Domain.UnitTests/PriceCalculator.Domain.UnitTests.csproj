@@ -24,8 +24,4 @@
         </PackageReference>
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\..\src\PriceCalculator.Domain\PriceCalculator.Domain.csproj" />
-    </ItemGroup>
-
 </Project>

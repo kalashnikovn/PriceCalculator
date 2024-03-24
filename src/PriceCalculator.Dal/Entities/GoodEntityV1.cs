@@ -6,9 +6,11 @@ public record GoodEntityV1
     
     public long UserId { get; init; }
     
-    public long Width { get; init; }
+    public double Width { get; init; }
     
-    public long Height { get; init; }
+    public double Height { get; init; }
     
-    public long Length { get; init; }
+    public double Length { get; init; }
+    
+    public double Weight { get; init; }
 }

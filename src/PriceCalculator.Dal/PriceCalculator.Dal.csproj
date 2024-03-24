@@ -11,6 +11,7 @@
       <PackageReference Include="FluentMigrator" Version="5.1.0" />
       <PackageReference Include="FluentMigrator.Extensions.Postgres" Version="5.1.0" />
       <PackageReference Include="FluentMigrator.Runner" Version="5.1.0" />
+      <PackageReference Include="MediatR" Version="12.2.0" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
       <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0" />
       <PackageReference Include="Npgsql" Version="8.0.2" />

@@ -2,7 +2,7 @@
 
 namespace PriceCalculator.Dal.Repositories.Interfaces;
 
-public interface IGoodsRepository
+public interface IGoodsRepository : IDbRepository
 {
     Task<long[]> Add(GoodEntityV1[] entities, CancellationToken cancellationToken);
 

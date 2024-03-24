@@ -3,7 +3,7 @@ using PriceCalculator.Dal.Models;
 
 namespace PriceCalculator.Dal.Repositories.Interfaces;
 
-public interface ICalculationsRepository
+public interface ICalculationsRepository : IDbRepository
 {
     Task<long[]> Add(CalculationEntityV1[] entitiesV1, CancellationToken cancellationToken);
 

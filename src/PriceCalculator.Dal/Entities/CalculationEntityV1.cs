@@ -12,7 +12,7 @@ public record CalculationEntityV1
     
     public double TotalWeight { get; init; }
     
-    public double Price { get; init; }
+    public decimal Price { get; init; }
     
     public DateTimeOffset At { get; init; }
 }
