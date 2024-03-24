@@ -12,7 +12,6 @@ public class InitSchema : Migration
             .WithColumn("user_id").AsInt64().NotNullable()
             .WithColumn("width").AsDouble().NotNullable()
             .WithColumn("height").AsDouble().NotNullable()
-            .WithColumn("height").AsDouble().NotNullable()
             .WithColumn("length").AsDouble().NotNullable()
             .WithColumn("weight").AsDouble().NotNullable();
 

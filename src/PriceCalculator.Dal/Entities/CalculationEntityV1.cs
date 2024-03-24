@@ -1,0 +1,18 @@
+﻿namespace PriceCalculator.Dal.Entities;
+
+public record CalculationEntityV1
+{
+    public long Id { get; init; }
+    
+    public long UserId { get; init; }
+    
+    public long[] GoodsId { get; init; } = Array.Empty<long>();
+    
+    public double TotalVolume { get; init; }
+    
+    public double TotalWeight { get; init; }
+    
+    public double Price { get; init; }
+    
+    public DateTimeOffset At { get; init; }
+}
