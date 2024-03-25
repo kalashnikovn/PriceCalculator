@@ -93,6 +93,23 @@ public class CalculationService : ICalculationService
             .ToArray();
     }
 
+    public async Task<QueryCalculationModel[]> QueryCalculations(long[] calculationIds, CancellationToken token)
+    {
+        var calculationEntities = await _calculationsRepository.Query(calculationIds, token);
+        
+        return calculationEntities
+            .Select(x => new QueryCalculationModel(
+                Id: x.Id,
+                UserId: x.UserId,
+                TotalVolume: x.TotalVolume,
+                TotalWeight: x.TotalWeight,
+                Price: x.Price,
+                GoodIds: x.GoodsId
+            ))
+            .ToArray();
+        
+    }
+
     public async Task<int> RemoveCalculations(QueryCalculationModel[] calculations, CancellationToken cancellationToken)
     {
         var calculationIds = calculations

@@ -70,7 +70,7 @@ where user_id = @UserId;
     {
         const string sqlCommand = @"
 delete from goods 
-where id in (SELECT UNNEST(@Ids))
+where id = ANY(@Ids)
 ";
 
         var sqlQueryParams = new

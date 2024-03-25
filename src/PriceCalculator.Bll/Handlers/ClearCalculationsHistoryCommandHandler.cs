@@ -20,19 +20,12 @@ public class ClearCalculationsHistoryCommandHandler
     
     public async Task Handle(ClearCalculationsHistoryCommand request, CancellationToken cancellationToken)
     {
-        var queryModel = new QueryCalculationFilter(
-            UserId: request.UserId,
-            Limit: int.MaxValue,
-            Offset: 0
-        );
+        var calculations = await _calculationService.QueryCalculations(
+            request.CalculationIds,
+            cancellationToken);
 
-        var calculations = await _calculationService.QueryCalculations(queryModel, cancellationToken);
-        var calculationIds = calculations.Select(x => x.Id).ToArray();
-
-        if (!calculations.Any())
-            throw new OneOrManyCalculationsNotFoundException("Расчеты не найдены");
-
-        request.EnsureBelongsToUser(calculationIds);
+        request.EnsureAllFound(calculations);
+        request.EnsureBelongsToOneUser(calculations);
         
         await _calculationService.RemoveCalculations(calculations, cancellationToken);
     }

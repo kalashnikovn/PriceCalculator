@@ -65,11 +65,36 @@ limit @Limit offset @Offset
             .ToArray();
     }
 
+    public async Task<CalculationEntityV1[]> Query(long[] calculationIds, CancellationToken cancellationToken)
+    {
+        const string sqlQuery = @"
+select id, user_id, goods_id, total_volume, total_weight, price, at
+from calculations
+where id = ANY(@CalculationIds)
+order by at desc
+";
+
+        var sqlQueryParams = new
+        {
+            CalculationIds = calculationIds
+        };
+
+        await using var connection = await GetAndOpenConnection();
+        var entities = await connection.QueryAsync<CalculationEntityV1>(
+            new CommandDefinition(
+                sqlQuery,
+                sqlQueryParams,
+                cancellationToken: cancellationToken));
+
+        return entities
+            .ToArray();
+    }
+
     public async Task<int> Remove(long[] ids, CancellationToken cancellationToken)
     {
         const string sqlCommand = @"
 delete from calculations 
-where id in (SELECT UNNEST(@Ids))
+where id = ANY(@Ids)
 ";
 
         var sqlQueryParams = new
