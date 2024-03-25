@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace PriceCalculator.Bll.Exceptions;
+﻿namespace PriceCalculator.Bll.Exceptions;
 
 public class OneOrManyCalculationsNotFoundException : Exception
 {

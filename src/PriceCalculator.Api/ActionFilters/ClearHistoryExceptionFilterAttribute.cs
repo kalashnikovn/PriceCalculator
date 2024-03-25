@@ -11,7 +11,7 @@ public class ClearHistoryExceptionFilterAttribute : Attribute, IExceptionFilter
     {
         switch (context.Exception)
         {
-            case OneOrManyCalculationsNotFoundException exception:
+            case OneOrManyCalculationsNotFoundException:
                 var result = new ContentResult
                 {
                     StatusCode = (int)HttpStatusCode.BadRequest

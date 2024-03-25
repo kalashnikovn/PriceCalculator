@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using PriceCalculator.Bll.Extensions;
 using PriceCalculator.Bll.Models;
 using PriceCalculator.Bll.Queries;
 using PriceCalculator.Bll.Services.Interfaces;

@@ -1,7 +1,4 @@
-﻿using System.Net;
-using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Mvc;
-using PriceCalculator.Api.ActionFilters;
+﻿using FluentValidation.AspNetCore;
 using PriceCalculator.Api.NamingPolicies;
 using PriceCalculator.Bll.Extensions;
 using PriceCalculator.Dal.Extensions;

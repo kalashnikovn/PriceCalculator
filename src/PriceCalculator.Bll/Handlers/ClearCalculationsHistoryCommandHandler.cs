@@ -1,10 +1,7 @@
 ﻿using MediatR;
 using PriceCalculator.Bll.Commands;
-using PriceCalculator.Bll.Exceptions;
 using PriceCalculator.Bll.Extensions;
-using PriceCalculator.Bll.Models;
 using PriceCalculator.Bll.Services.Interfaces;
-using PriceCalculator.Dal.Models;
 
 namespace PriceCalculator.Bll.Handlers;
 

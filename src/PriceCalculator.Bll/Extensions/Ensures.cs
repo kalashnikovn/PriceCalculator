@@ -1,8 +1,6 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using PriceCalculator.Bll.Commands;
+﻿using PriceCalculator.Bll.Commands;
 using PriceCalculator.Bll.Exceptions;
 using PriceCalculator.Bll.Models;
-using PriceCalculator.Bll.Queries;
 
 namespace PriceCalculator.Bll.Extensions;
 
