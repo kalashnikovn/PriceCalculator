@@ -30,22 +30,12 @@ public sealed class Startup
                 conf.RegisterValidatorsFromAssembly(typeof(Program).Assembly);
                 conf.AutomaticValidationEnabled = true;
             })
-            //.AddMvcOptions(ConfigureMvc)
             .Services
             .AddEndpointsApiExplorer()
             .AddSwaggerGen(o => o.CustomSchemaIds(x => x.FullName?.Replace("+", ".")));
 
     }
-
     
-
-    private static void ConfigureMvc(MvcOptions x)
-    {
-        x.Filters.Add(new ExceptionFilterAttribute());
-        x.Filters.Add(new ResponseTypeAttribute((int)HttpStatusCode.InternalServerError));
-        x.Filters.Add(new ResponseTypeAttribute((int)HttpStatusCode.BadRequest));
-        x.Filters.Add(new ProducesResponseTypeAttribute((int)HttpStatusCode.OK));
-    }
 
     public void Configure(
         IHostEnvironment environment,

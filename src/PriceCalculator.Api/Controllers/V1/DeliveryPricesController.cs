@@ -1,5 +1,7 @@
-﻿using MediatR;
+﻿using System.Net;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using PriceCalculator.Api.ActionFilters;
 using PriceCalculator.Api.Requests.V1;
 using PriceCalculator.Api.Responses.V1;
 using PriceCalculator.Bll.Commands;
@@ -61,18 +63,18 @@ public sealed class DeliveryPricesController : ControllerBase
             ).ToArray();
     }
     
+    
     [HttpPost("clear-history")]
+    [ClearHistoryExceptionFilter]
+    [ProducesResponseType(typeof(void), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(OneOrManyCalculationsBelongsToAnotherUserResponse), (int)HttpStatusCode.Forbidden)]
     public async Task ClearHistory(ClearHistoryRequest request, CancellationToken cancellationToken)
     {
-
         var command = new ClearCalculationsHistoryCommand(
             request.UserId,
             request.CalculationIds
             );
 
         await _mediator.Send(command, cancellationToken);
-        
-        
     }
-    
 }
