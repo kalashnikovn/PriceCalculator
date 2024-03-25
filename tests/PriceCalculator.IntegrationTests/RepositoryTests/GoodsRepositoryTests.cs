@@ -4,18 +4,25 @@ using PriceCalculator.IntegrationTests.Fixtures;
 using TestingInfrastructure.Creators;
 using TestingInfrastructure.Fakers;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace PriceCalculator.IntegrationTests.RepositoryTests;
 
 [Collection(nameof(TestFixture))]
 public class GoodsRepositoryTests
 {
+    private readonly ITestOutputHelper _testOutputHelper;
     private readonly double _requiredDoublePrecision = 0.00001d;
 
     private readonly IGoodsRepository _goodsRepository;
 
-    public GoodsRepositoryTests(TestFixture fixture)
+    public GoodsRepositoryTests(
+        TestFixture fixture,
+        ITestOutputHelper testOutputHelper
+    
+    )
     {
+        _testOutputHelper = testOutputHelper;
         _goodsRepository = fixture.GoodsRepository;
     }
 
@@ -108,5 +115,26 @@ public class GoodsRepositoryTests
 
         // Assert
         foundGoods.Should().BeEmpty();
+    }
+
+    [Theory]
+    [InlineData(3)]
+    [InlineData(5)]
+    public async Task Remove_Goods_Success(int count)
+    {
+        // Arrange
+        var goods = GoodEntityV1Faker.Generate(count);
+        
+        var ids = await _goodsRepository.Add(goods, default);
+        
+        // Act
+        var rowsAffected = await _goodsRepository.Remove(ids, default);
+
+        // Assert
+        _testOutputHelper.WriteLine($"Rows affected: {rowsAffected}");
+        Assert.True(rowsAffected > 0);
+        rowsAffected.Should().Be(goods.Length);
+
+
     }
 }

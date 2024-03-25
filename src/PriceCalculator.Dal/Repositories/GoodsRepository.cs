@@ -65,4 +65,26 @@ where user_id = @UserId;
         return entities
             .ToArray();
     }
+
+    public async Task<int> Remove(long[] ids, CancellationToken cancellationToken)
+    {
+        const string sqlCommand = @"
+delete from goods 
+where id in (SELECT UNNEST(@Ids))
+";
+
+        var sqlQueryParams = new
+        {
+            Ids = ids
+        };
+
+        await using var connection = await GetAndOpenConnection();
+        var rows = await connection.ExecuteAsync(new CommandDefinition(
+            sqlCommand,
+            sqlQueryParams,
+            cancellationToken: cancellationToken
+            ));
+
+        return rows;
+    }
 }

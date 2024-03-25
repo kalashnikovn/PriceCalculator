@@ -5,20 +5,26 @@ using PriceCalculator.Dal.Repositories.Interfaces;
 using TestingInfrastructure.Creators;
 using TestingInfrastructure.Fakers;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace PriceCalculator.IntegrationTests.RepositoryTests;
 
 [Collection(nameof(TestFixture))]
 public class CalculationsRepositoryTests
 {
+    private readonly ITestOutputHelper _testOutputHelper;
     private readonly double _requiredDoublePrecision = 0.00001d;
     private readonly decimal _requiredDecimalPrecision = 0.00001m;
     private readonly TimeSpan _requiredDateTimePrecision = TimeSpan.FromMilliseconds(100);
     
     private readonly ICalculationsRepository _calculationRepository;
 
-    public CalculationsRepositoryTests(TestFixture fixture)
+    public CalculationsRepositoryTests(
+        TestFixture fixture,
+        ITestOutputHelper testOutputHelper
+        )
     {
+        _testOutputHelper = testOutputHelper;
         _calculationRepository = fixture.CalculationRepository;
     }
 
@@ -169,5 +175,29 @@ public class CalculationsRepositoryTests
 
         // Assert
         foundCalculations.Should().BeEmpty();
+    }
+    
+    [Theory]
+    [InlineData(3)]
+    [InlineData(5)]
+    public async Task Remove_Calculations_Success(int count)
+    {
+        // Arrange
+        var now = DateTimeOffset.UtcNow;
+        
+        var goods = CalculationEntityV1Faker.Generate(count)
+            .Select(x => x.WithAt(now))
+            .ToArray();
+        
+        var ids = await _calculationRepository.Add(goods, default);
+        
+        // Act
+        var rowsAffected = await _calculationRepository.Remove(ids, default);
+
+        // Assert
+        _testOutputHelper.WriteLine($"Rows affected: {rowsAffected}");
+        Assert.True(rowsAffected > 0);
+        rowsAffected.Should().Be(goods.Length);
+        
     }
 }
