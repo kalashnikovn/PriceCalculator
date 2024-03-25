@@ -62,8 +62,15 @@ public sealed class DeliveryPricesController : ControllerBase
     }
     
     [HttpPost("clear-history")]
-    public void ClearHistory(ClearHistoryRequest request, CancellationToken cancellationToken)
+    public async Task ClearHistory(ClearHistoryRequest request, CancellationToken cancellationToken)
     {
+
+        var command = new ClearCalculationsHistoryCommand(
+            request.UserId,
+            request.CalculationIds
+            );
+
+        await _mediator.Send(command, cancellationToken);
         
         
     }

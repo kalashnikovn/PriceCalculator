@@ -1,4 +1,5 @@
 ﻿using PriceCalculator.Bll.Models;
+using PriceCalculator.Dal.Entities;
 
 namespace PriceCalculator.Bll.Services.Interfaces;
 
@@ -21,6 +22,6 @@ public interface ICalculationService
         CancellationToken token);
 
     Task<int> RemoveCalculations(
-        RemoveCalculationsModel removeCalculations,
+        QueryCalculationModel[] removeCalculationsModel,
         CancellationToken cancellationToken);
 }
