@@ -19,4 +19,8 @@ public interface ICalculationService
     Task<QueryCalculationModel[]> QueryCalculations(
         QueryCalculationFilter query,
         CancellationToken token);
+
+    Task<int> RemoveCalculations(
+        RemoveCalculationsModel removeCalculations,
+        CancellationToken cancellationToken);
 }

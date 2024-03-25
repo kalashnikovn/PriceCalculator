@@ -92,4 +92,36 @@ public class CalculationService : ICalculationService
                 ))
             .ToArray();
     }
+
+    public async Task<int> RemoveCalculations(RemoveCalculationsModel removeCalculations, CancellationToken cancellationToken)
+    {
+        var queryModel = new GetHistoryQueryModel(
+            UserId: removeCalculations.UserId,
+            Limit: removeCalculations.CalculationIds.Length,
+            Offset: 0
+        );
+
+        var calculationEntities = await _calculationsRepository.Query(queryModel, cancellationToken);
+
+        
+        var calculationIds = calculationEntities
+            .Select(x => x.Id)
+            .ToArray();
+        
+        var goodIds = calculationEntities
+            .Select(x => x.GoodsId)
+            .ToArray()
+            .SelectMany(x => x)
+            .ToArray();
+
+        using var transaction = _calculationsRepository.CreateTransactionScope();
+
+        var rowsAffected = await _calculationsRepository.Remove(calculationIds, cancellationToken);
+        await _goodsRepository.Remove(goodIds, cancellationToken);
+        
+        transaction.Complete();
+
+        return rowsAffected;
+
+    }
 }
