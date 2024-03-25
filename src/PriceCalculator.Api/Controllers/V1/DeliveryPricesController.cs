@@ -61,5 +61,11 @@ public sealed class DeliveryPricesController : ControllerBase
             ).ToArray();
     }
     
+    [HttpPost("clear-history")]
+    public void ClearHistory(ClearHistoryRequest request, CancellationToken cancellationToken)
+    {
+        
+        
+    }
     
 }
