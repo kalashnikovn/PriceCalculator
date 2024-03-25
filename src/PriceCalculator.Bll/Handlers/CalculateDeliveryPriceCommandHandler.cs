@@ -6,7 +6,7 @@ using PriceCalculator.Bll.Services.Interfaces;
 
 namespace PriceCalculator.Bll.Handlers;
 
-public sealed class CalculateDeliveryPriceCommandHandler 
+public class CalculateDeliveryPriceCommandHandler 
     : IRequestHandler<CalculateDeliveryPriceCommand, CalculateDeliveryPriceResult>
 {
     private readonly ICalculationService _calculationService;

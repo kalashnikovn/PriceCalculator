@@ -6,7 +6,7 @@ using PriceCalculator.Bll.Services.Interfaces;
 
 namespace PriceCalculator.Bll.Handlers;
 
-public sealed class GetCalculationHistoryQueryHandler
+public class GetCalculationHistoryQueryHandler
     : IRequestHandler<GetCalculationHistoryQuery, GetHistoryQueryResult>
 {
     private readonly ICalculationService _calculationService;

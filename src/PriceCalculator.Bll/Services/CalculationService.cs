@@ -6,10 +6,10 @@ using PriceCalculator.Dal.Repositories.Interfaces;
 
 namespace PriceCalculator.Bll.Services;
 
-public sealed class CalculationService : ICalculationService
+public class CalculationService : ICalculationService
 {
-    private const decimal VolumeToPriceRatio = 3.27m;
-    private const decimal WeightToPriceRatio = 1.37m;
+    public const decimal VolumeToPriceRatio = 3.27m;
+    public const decimal WeightToPriceRatio = 1.37m;
     
     private readonly ICalculationsRepository _calculationsRepository;
     private readonly IGoodsRepository _goodsRepository;
