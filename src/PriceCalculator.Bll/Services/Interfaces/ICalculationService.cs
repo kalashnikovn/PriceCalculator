@@ -24,7 +24,11 @@ public interface ICalculationService
         long[] calculationIds,
         CancellationToken token);
 
-    Task<int> RemoveCalculations(
+    Task RemoveCalculations(
         QueryCalculationModel[] removeCalculationsModel,
+        CancellationToken cancellationToken);
+    
+    Task RemoveCalculations(
+        long userId,
         CancellationToken cancellationToken);
 }

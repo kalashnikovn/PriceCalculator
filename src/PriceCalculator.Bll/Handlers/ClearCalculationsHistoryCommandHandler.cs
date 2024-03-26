@@ -17,6 +17,12 @@ public class ClearCalculationsHistoryCommandHandler
     
     public async Task Handle(ClearCalculationsHistoryCommand request, CancellationToken cancellationToken)
     {
+        if (!request.CalculationIds.Any())
+        {
+            await _calculationService.RemoveCalculations(request.UserId, cancellationToken);
+            return;
+        }
+        
         var calculations = await _calculationService.QueryCalculations(
             request.CalculationIds,
             cancellationToken);

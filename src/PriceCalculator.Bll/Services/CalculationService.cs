@@ -110,7 +110,7 @@ public class CalculationService : ICalculationService
         
     }
 
-    public async Task<int> RemoveCalculations(QueryCalculationModel[] calculations, CancellationToken cancellationToken)
+    public async Task RemoveCalculations(QueryCalculationModel[] calculations, CancellationToken cancellationToken)
     {
         var calculationIds = calculations
             .Select(x => x.Id)
@@ -118,17 +118,21 @@ public class CalculationService : ICalculationService
         
         var goodIds = calculations
             .Select(x => x.GoodIds)
-            .ToArray()
             .SelectMany(x => x)
+            .Distinct()
             .ToArray();
 
         using var transaction = _calculationsRepository.CreateTransactionScope();
-        var rowsAffected = await _calculationsRepository.Remove(calculationIds, cancellationToken);
+        await _calculationsRepository.Remove(calculationIds, cancellationToken);
         await _goodsRepository.Remove(goodIds, cancellationToken);
         transaction.Complete();
+    }
 
-        return rowsAffected;
-
-
+    public async Task RemoveCalculations(long userId, CancellationToken cancellationToken)
+    {
+        using var transaction = _calculationsRepository.CreateTransactionScope();
+        await _calculationsRepository.Remove(userId, cancellationToken);
+        await _goodsRepository.Remove(userId, cancellationToken);
+        transaction.Complete();
     }
 }
