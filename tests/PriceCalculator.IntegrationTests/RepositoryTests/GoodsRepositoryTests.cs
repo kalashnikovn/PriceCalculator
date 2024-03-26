@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Runtime.InteropServices;
+using FluentAssertions;
 using PriceCalculator.Dal.Repositories.Interfaces;
 using PriceCalculator.IntegrationTests.Fixtures;
 using TestingInfrastructure.Creators;
@@ -135,6 +136,27 @@ public class GoodsRepositoryTests
         Assert.True(rowsAffected > 0);
         rowsAffected.Should().Be(goods.Length);
 
+    }
 
+    [Theory]
+    [InlineData(5)]
+    [InlineData(10)]
+    public async Task Remove_GoodsByUserId_Success(int count)
+    {
+        // Arrange
+        var userId = Create.RandomId();
+        var goods = GoodEntityV1Faker.Generate(count)
+            .Select(x => x.WithUserId(userId))
+            .ToArray();
+
+        var goodIds = await _goodsRepository.Add(goods, default);
+
+        // Act
+        var rowsAffected = await _goodsRepository.Remove(userId, default);
+        
+        // Assert
+        _testOutputHelper.WriteLine($"Rows affected: {rowsAffected}");
+        Assert.True(rowsAffected > 0);
+        rowsAffected.Should().Be(goodIds.Length);
     }
 }

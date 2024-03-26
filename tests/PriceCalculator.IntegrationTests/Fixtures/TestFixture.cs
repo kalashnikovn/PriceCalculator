@@ -15,6 +15,7 @@ public class TestFixture
     
     public TestFixture()
     {
+        Console.WriteLine(Directory.GetCurrentDirectory());
         var config = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json")

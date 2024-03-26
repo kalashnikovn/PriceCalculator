@@ -13,4 +13,5 @@ public interface ICalculationsRepository : IDbRepository
         CancellationToken cancellationToken);
 
     Task<int> Remove(long[] ids, CancellationToken cancellationToken);
+    Task<int> Remove(long userId, CancellationToken cancellationToken);
 }

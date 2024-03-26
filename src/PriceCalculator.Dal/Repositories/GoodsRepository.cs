@@ -87,4 +87,26 @@ where id = ANY(@Ids)
 
         return rows;
     }
+
+    public async Task<int> Remove(long userId, CancellationToken cancellationToken)
+    {
+        const string sqlCommand = @"
+delete from goods 
+where user_id = @UserId
+";
+
+        var sqlQueryParams = new
+        {
+            UserId = userId
+        };
+
+        await using var connection = await GetAndOpenConnection();
+        var rows = await connection.ExecuteAsync(new CommandDefinition(
+            sqlCommand,
+            sqlQueryParams,
+            cancellationToken: cancellationToken
+        ));
+
+        return rows;
+    }
 }

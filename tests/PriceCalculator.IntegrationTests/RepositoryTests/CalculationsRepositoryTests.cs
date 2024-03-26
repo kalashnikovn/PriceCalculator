@@ -185,11 +185,11 @@ public class CalculationsRepositoryTests
         // Arrange
         var now = DateTimeOffset.UtcNow;
         
-        var goods = CalculationEntityV1Faker.Generate(count)
+        var calculations = CalculationEntityV1Faker.Generate(count)
             .Select(x => x.WithAt(now))
             .ToArray();
         
-        var ids = await _calculationRepository.Add(goods, default);
+        var ids = await _calculationRepository.Add(calculations, default);
         
         // Act
         var rowsAffected = await _calculationRepository.Remove(ids, default);
@@ -197,7 +197,32 @@ public class CalculationsRepositoryTests
         // Assert
         _testOutputHelper.WriteLine($"Rows affected: {rowsAffected}");
         Assert.True(rowsAffected > 0);
-        rowsAffected.Should().Be(goods.Length);
+        rowsAffected.Should().Be(calculations.Length);
         
+    }
+    
+    [Theory]
+    [InlineData(5)]
+    [InlineData(10)]
+    public async Task Remove_CalculationsByUserId_Success(int count)
+    {
+        // Arrange
+        var now = DateTimeOffset.UtcNow;
+        var userId = Create.RandomId();
+        var calculations = CalculationEntityV1Faker.Generate(count)
+            .Select(x => x
+                .WithUserId(userId)
+                .WithAt(now))
+            .ToArray();
+
+        var calculationIds = await _calculationRepository.Add(calculations, default);
+
+        // Act
+        var rowsAffected = await _calculationRepository.Remove(userId, default);
+        
+        // Assert
+        _testOutputHelper.WriteLine($"Rows affected: {rowsAffected}");
+        Assert.True(rowsAffected > 0);
+        rowsAffected.Should().Be(calculationIds.Length);
     }
 }
