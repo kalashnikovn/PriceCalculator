@@ -3,5 +3,6 @@
 public record GetHistoryRequest(
     long UserId,
     int Take,
-    int Skip
+    int Skip,
+    long[] CalculationIds
     );

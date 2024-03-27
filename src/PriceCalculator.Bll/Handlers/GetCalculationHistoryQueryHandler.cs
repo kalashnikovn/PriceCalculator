@@ -27,7 +27,11 @@ public class GetCalculationHistoryQueryHandler
         
         var logs = await _calculationService.QueryCalculations(queryFilter, cancellationToken);
 
-        var items = logs.Select(x => 
+        var queryIds = request.CalculationIds.ToHashSet();
+
+        var items = logs
+            .Where(x => queryIds.Contains(x.Id))
+            .Select(x => 
                 new GetHistoryQueryResult.HistoryItem(
                     x.TotalVolume,
                     x.TotalWeight,

@@ -48,7 +48,8 @@ public sealed class DeliveryPricesController : ControllerBase
         var command = new GetCalculationHistoryQuery(
             request.UserId,
             request.Take,
-            request.Skip
+            request.Skip,
+            request.CalculationIds
             );
 
         var result = await _mediator.Send(command, cancellationToken);
