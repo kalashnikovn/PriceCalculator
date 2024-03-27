@@ -288,4 +288,33 @@ public class CalculationsRepositoryTests
         Assert.True(rowsAffected > 0);
         rowsAffected.Should().Be(calculationIds.Length);
     }
+    
+    [Fact]
+    public async Task Remove_CalculationsIdsSpecified_ShouldRemoveOnlySpecifiedCalculations()
+    {
+        // Arrange
+        var userId = Create.RandomId();
+        var now = DateTimeOffset.UtcNow;
+
+        var calculations = CalculationEntityV1Faker.Generate(15)
+            .Select(x => x.WithUserId(userId)
+                .WithAt(now))
+            .ToArray();
+
+        var calculationsIds = await _calculationRepository.Add(calculations, default);
+        var calculationsIdsForDelete = calculationsIds.Skip(4).ToArray();
+        var remainingCalculationsIds = calculationsIds.Except(calculationsIdsForDelete).ToArray();
+        
+        // Act
+        await _calculationRepository.Remove(calculationsIdsForDelete, default);
+        
+        var foundCalculations = await _calculationRepository.Query(
+            new GetHistoryQueryModel(userId, 100, 0), 
+            default);
+
+        var foundCalculationsIds = foundCalculations.Select(x => x.Id).ToArray();
+        
+        // Assert
+        foundCalculationsIds.Should().BeEquivalentTo(remainingCalculationsIds);
+    }
 }
