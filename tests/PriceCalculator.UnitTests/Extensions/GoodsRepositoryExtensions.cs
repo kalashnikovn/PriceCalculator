@@ -30,6 +30,28 @@ public static class GoodsRepositoryExtensions
 
         return repository;
     }
+    
+    public static Mock<IGoodsRepository> SetupRemoveGoodsByIds(
+        this Mock<IGoodsRepository> repository)
+    {
+        repository.Setup(p =>
+                p.Remove(It.IsAny<long[]>(), 
+                    It.IsAny<CancellationToken>()))
+            .ReturnsAsync(0);
+
+        return repository;
+    }
+    
+    public static Mock<IGoodsRepository> SetupRemoveGoodsByUserId(
+        this Mock<IGoodsRepository> repository)
+    {
+        repository.Setup(p =>
+                p.Remove(It.IsAny<long>(), 
+                    It.IsAny<CancellationToken>()))
+            .ReturnsAsync(0);
+
+        return repository;
+    }
 
     public static void VerifyAddWasCalledOnce(
         this Mock<IGoodsRepository> repository,
@@ -48,6 +70,27 @@ public static class GoodsRepositoryExtensions
     {
         repository.Verify(p =>
                 p.Query(
+                    It.Is<long>(x => x == userId),
+                    It.IsAny<CancellationToken>()),
+            Times.Once);
+    }
+    
+    public static void VerifyRemoveGoodsWasCalledOnce(
+        this Mock<IGoodsRepository> repository)
+    {
+        repository.Verify(p =>
+                p.Remove(
+                    It.IsAny<long[]>(),
+                    It.IsAny<CancellationToken>()),
+            Times.Once);
+    }
+    
+    public static void VerifyRemoveGoodsWasCalledOnce(
+        this Mock<IGoodsRepository> repository,
+        long userId)
+    {
+        repository.Verify(p =>
+                p.Remove(
                     It.Is<long>(x => x == userId),
                     It.IsAny<CancellationToken>()),
             Times.Once);

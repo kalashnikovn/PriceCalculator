@@ -84,6 +84,69 @@ public class CalculationsRepositoryTests
         calculation.TotalWeight.Should().BeApproximately(expected.TotalWeight, _requiredDoublePrecision);
     }
     
+    [Fact]
+    public async Task Query_SingleCalculationById_Success()
+    {
+        // Arrange
+        var userId = Create.RandomId();
+        var now = DateTimeOffset.UtcNow;
+
+        var calculations = CalculationEntityV1Faker.Generate()
+            .Select(x => x.WithUserId(userId)
+                .WithAt(now))
+            .ToArray();
+        var expected = calculations.Single();
+        
+        var calculationId = (await _calculationRepository.Add(calculations, default))
+            .Single();
+
+        // Act
+        var foundCalculations = await _calculationRepository.Query(
+            new []{calculationId}, 
+            default);
+
+        // Asserts
+        foundCalculations.Should().HaveCount(1);
+        var calculation = foundCalculations.Single();
+
+        calculation.Id.Should().Be(calculationId);
+        calculation.UserId.Should().Be(expected.UserId);
+        calculation.At.Should().BeCloseTo(expected.At, _requiredDateTimePrecision);
+        calculation.Price.Should().BeApproximately(expected.Price, _requiredDecimalPrecision);
+        calculation.GoodsId.Should().BeEquivalentTo(expected.GoodsId);
+        calculation.TotalVolume.Should().BeApproximately(expected.TotalVolume, _requiredDoublePrecision);
+        calculation.TotalWeight.Should().BeApproximately(expected.TotalWeight, _requiredDoublePrecision);
+    }
+    
+    [Theory]
+    [InlineData(5)]
+    [InlineData(10)]
+    public async Task Query_AllCalculationsByIds_Success(int count)
+    {
+        // Arrange
+        var userId = Create.RandomId();
+        var now = DateTimeOffset.UtcNow;
+
+        var calculations = CalculationEntityV1Faker.Generate(count)
+            .Select(x => x.WithUserId(userId)
+                .WithAt(now))
+            .ToArray();
+        
+        var calculationIds = (await _calculationRepository.Add(calculations, default))
+            .ToHashSet();
+
+        // Act
+        var foundCalculations = await _calculationRepository.Query(
+            calculationIds.ToArray(), 
+            default);
+
+        // Asserts
+        foundCalculations.Should().HaveCount(count);
+        foundCalculations.Should().NotBeEmpty();
+        foundCalculations.Should().OnlyContain(x => x.UserId == userId);
+        foundCalculations.Should().OnlyContain(x => calculationIds.Contains(x.Id));
+    }
+    
     [Theory]
     [InlineData(3,  2, 3)]
     [InlineData(1,  6, 1)]

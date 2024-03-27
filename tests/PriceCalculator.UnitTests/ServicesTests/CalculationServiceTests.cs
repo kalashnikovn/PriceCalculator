@@ -149,4 +149,119 @@ public class CalculationServiceTests
         result.Select(x => x.Price)
             .Should().IntersectWith(calculations.Select(x => x.Price));
     }
+    
+    
+    [Fact]
+    public async Task QueryCalculationsByIds_Success()
+    {
+        // arrange
+        var userId = Create.RandomId();
+        
+        
+        var calculations = CalculationEntityV1Faker.Generate(5)
+            .Select(x => x.WithUserId(userId))
+            .ToArray();
+
+        var calculationIds = calculations.Select(x => x.Id)
+            .ToArray();
+        
+        var builder = new CalculationServiceBuilder();
+        builder.CalculationRepository
+            .SetupQueryCalculationByIds(calculations);
+        var service = builder.Build();
+
+        //act
+        var result = await service.QueryCalculations(calculationIds, default);
+
+        //asserts
+        service.CalculationRepository
+            .VerifyQueryByIdsWasCalledOnce(calculationIds);
+        
+        service.VerifyNoOtherCalls();
+
+        result.Should().NotBeEmpty();
+        result.Should().OnlyContain(x => x.UserId == userId);
+        result.Should().OnlyContain(x => x.Id > 0);
+        result.Select(x => x.TotalWeight)
+            .Should().IntersectWith(calculations.Select(x => x.TotalWeight));
+        result.Select(x => x.TotalVolume)
+            .Should().IntersectWith(calculations.Select(x => x.TotalVolume));
+        result.Select(x => x.Price)
+            .Should().IntersectWith(calculations.Select(x => x.Price));
+    }
+    
+    [Fact]
+    public async Task RemoveCalculationsByIds_Success()
+    {
+        // arrange
+        var userId = Create.RandomId();
+        
+        
+        var calculations = QueryCalculationModelFaker.Generate(5)
+            .Select(x => x.WithUserId(userId))
+            .ToArray();
+
+        var calculationIds = calculations.Select(x => x.Id)
+            .ToArray();
+
+        
+        var builder = new CalculationServiceBuilder();
+        builder.CalculationRepository
+            .SetupRemoveCalculationByIds(calculationIds.Length)
+            .SetupCreateTransactionScope();
+        builder.GoodsRepository
+            .SetupRemoveGoodsByIds();
+        var service = builder.Build();
+
+        //act
+        await service.RemoveCalculations(calculations, default);
+
+        //asserts
+        service.CalculationRepository
+            .VerifyRemoveCalculationsWasCalledOnce(calculationIds)
+            .VerifyCreateTransactionScopeWasCalledOnce(IsolationLevel.ReadCommitted);
+        service.GoodsRepository
+            .VerifyRemoveGoodsWasCalledOnce();
+        
+        service.VerifyNoOtherCalls();
+        
+    }
+    
+    
+    [Fact]
+    public async Task RemoveCalculationsByUserId_Success()
+    {
+        // arrange
+        var userId = Create.RandomId();
+        
+        
+        var calculations = QueryCalculationModelFaker.Generate(5)
+            .Select(x => x.WithUserId(userId))
+            .ToArray();
+
+        var calculationIds = calculations.Select(x => x.Id)
+            .ToArray();
+
+        
+        var builder = new CalculationServiceBuilder();
+        builder.CalculationRepository
+            .SetupRemoveCalculationByUserId(calculationIds.Length)
+            .SetupCreateTransactionScope();
+        builder.GoodsRepository
+            .SetupRemoveGoodsByUserId();
+        var service = builder.Build();
+
+        // act
+        await service.RemoveCalculations(userId, default);
+
+        //asserts
+        service.CalculationRepository
+            .VerifyRemoveCalculationsWasCalledOnce(userId)
+            .VerifyCreateTransactionScopeWasCalledOnce(IsolationLevel.ReadCommitted);
+        service.GoodsRepository
+            .VerifyRemoveGoodsWasCalledOnce(userId);
+        
+        service.VerifyNoOtherCalls();
+        
+    }
 }

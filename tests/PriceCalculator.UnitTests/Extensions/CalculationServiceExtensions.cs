@@ -57,6 +57,40 @@ public static class CalculationServiceExtensions
         return service;
     }
     
+    public static Mock<ICalculationService> SetupQueryCalculationsByIds(
+        this Mock<ICalculationService> service,
+        QueryCalculationModel[] model)
+    {
+        service.Setup(p =>
+                p.QueryCalculations(It.IsAny<long[]>(), 
+                    It.IsAny<CancellationToken>()))
+            .ReturnsAsync(model);
+
+        return service;
+    }
+    
+    public static Mock<ICalculationService> SetupRemoveCalculations(
+        this Mock<ICalculationService> service)
+    {
+        service.Setup(p =>
+                p.RemoveCalculations(It.IsAny<QueryCalculationModel[]>(), 
+                    It.IsAny<CancellationToken>()));
+
+        return service;
+    }
+    
+    public static Mock<ICalculationService> SetupRemoveCalculationsByUserId(
+        this Mock<ICalculationService> service)
+    {
+        service.Setup(p =>
+            p.RemoveCalculations(It.IsAny<long>(), 
+                It.IsAny<CancellationToken>()));
+
+        return service;
+    }
+    
+    
+    
     public static Mock<ICalculationService> VerifySaveCalculationWasCalledOnce(
         this Mock<ICalculationService> service,
         SaveCalculationModel model)
@@ -103,6 +137,46 @@ public static class CalculationServiceExtensions
         service.Verify(p =>
                 p.QueryCalculations(
                     It.Is<QueryCalculationFilter>(x => x == filter),
+                    It.IsAny<CancellationToken>()),
+            Times.Once);
+
+        return service;
+    }
+    
+    public static Mock<ICalculationService> VerifyQueryCalculationsWasCalledOnce(
+        this Mock<ICalculationService> service,
+        long[] calculationIds)
+    {
+        service.Verify(p =>
+                p.QueryCalculations(
+                    It.Is<long[]>(x => x.SequenceEqual(calculationIds)),
+                    It.IsAny<CancellationToken>()),
+            Times.Once);
+
+        return service;
+    }
+    
+    public static Mock<ICalculationService> VerifyRemoveCalculationsWasCalledOnce(
+        this Mock<ICalculationService> service,
+        QueryCalculationModel[] models)
+    {
+        service.Verify(p =>
+                p.RemoveCalculations(
+                    It.Is<QueryCalculationModel[]>(x => 
+                        x.SequenceEqual(models, new QueryCalculationModelComparer())),
+                    It.IsAny<CancellationToken>()),
+            Times.Once);
+
+        return service;
+    }
+    
+    public static Mock<ICalculationService> VerifyRemoveCalculationsWasCalledOnce(
+        this Mock<ICalculationService> service,
+        long userId)
+    {
+        service.Verify(p =>
+                p.RemoveCalculations(
+                    It.Is<long>(x => x == userId),
                     It.IsAny<CancellationToken>()),
             Times.Once);
 
