@@ -1,8 +1,7 @@
-﻿using System.Net;
-using Microsoft.AspNetCore.Mvc;
-using PriceCalculator.Api.ActionFilters;
-using PriceCalculator.Api.HostedServices;
-using PriceCalculator.Infrastructure;
+﻿using FluentValidation.AspNetCore;
+using PriceCalculator.Api.NamingPolicies;
+using PriceCalculator.Bll.Extensions;
+using PriceCalculator.Dal.Extensions;
 
 namespace PriceCalculator.Api;
 
@@ -18,24 +17,22 @@ public sealed class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services
-            .AddDomain(_configuration)
-            .AddInfrastructure()
+            .AddBll()
+            .AddDalInfrastructure(_configuration)
+            .AddDalRepositories()
             .AddControllers()
-            .AddMvcOptions(ConfigureMvc)
+            .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamingPolicy())
+            .AddFluentValidation(conf =>
+            {
+                conf.RegisterValidatorsFromAssembly(typeof(Program).Assembly);
+                conf.AutomaticValidationEnabled = true;
+            })
             .Services
             .AddEndpointsApiExplorer()
-            .AddSwaggerGen(o => o.CustomSchemaIds(x => x.FullName))
-            .AddHostedService<GoodsSyncHostedService>()
-            .AddHttpContextAccessor();
-    }
+            .AddSwaggerGen(o => o.CustomSchemaIds(x => x.FullName?.Replace("+", ".")));
 
-    private static void ConfigureMvc(MvcOptions x)
-    {
-        x.Filters.Add(new ExceptionFilterAttribute());
-        x.Filters.Add(new ResponseTypeAttribute((int)HttpStatusCode.InternalServerError));
-        x.Filters.Add(new ResponseTypeAttribute((int)HttpStatusCode.BadRequest));
-        x.Filters.Add(new ProducesResponseTypeAttribute((int)HttpStatusCode.OK));
     }
+    
 
     public void Configure(
         IHostEnvironment environment,

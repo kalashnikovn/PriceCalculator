@@ -1,4 +1,6 @@
-﻿namespace PriceCalculator.Api;
+﻿using PriceCalculator.Dal.Extensions;
+
+namespace PriceCalculator.Api;
 
 public class Program
 {
@@ -7,7 +9,10 @@ public class Program
         var builder = Host
             .CreateDefaultBuilder()
             .ConfigureWebHostDefaults(x => x.UseStartup<Startup>());
-        
-        builder.Build().Run();
+
+        var app = builder.Build();
+
+        app.MigrateUp();
+        app.Run();
     }
 }
