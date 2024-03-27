@@ -243,7 +243,7 @@ public class CalculationsRepositoryTests
     [Theory]
     [InlineData(3)]
     [InlineData(5)]
-    public async Task Remove_Calculations_Success(int count)
+    public async Task Remove_CalculationsByIds_Success(int count)
     {
         // Arrange
         var now = DateTimeOffset.UtcNow;

@@ -48,7 +48,7 @@ public class GoodsRepositoryTests
     }
     
     [Fact]
-    public async Task Query_Goods_Success()
+    public async Task Query_GoodsByUserId_Success()
     {
         // Arrange
         var userId = Create.RandomId();
@@ -70,7 +70,7 @@ public class GoodsRepositoryTests
     }
     
     [Fact]
-    public async Task Query_SingleGood_Success()
+    public async Task Query_SingleGoodByUserId_Success()
     {
         // Arrange
         var userId = Create.RandomId();
@@ -99,7 +99,7 @@ public class GoodsRepositoryTests
     }
     
     [Fact]
-    public async Task Query_Goods_ReturnsEmpty_WhenForWrongUser()
+    public async Task Query_GoodsForWrongUser_ReturnsEmpty()
     {
         // Arrange
         var userId = Create.RandomId();
@@ -121,20 +121,25 @@ public class GoodsRepositoryTests
     [Theory]
     [InlineData(3)]
     [InlineData(5)]
-    public async Task Remove_Goods_Success(int count)
+    public async Task Remove_GoodsByIds_Success(int count)
     {
         // Arrange
-        var goods = GoodEntityV1Faker.Generate(count);
+        var userId = Create.RandomId();
+        var goods = GoodEntityV1Faker.Generate(count)
+            .Select(x => x.WithUserId(userId))
+            .ToArray();
         
         var ids = await _goodsRepository.Add(goods, default);
         
         // Act
         var rowsAffected = await _goodsRepository.Remove(ids, default);
+        var foundGoods = await _goodsRepository.Query(userId, default);
 
         // Assert
         _testOutputHelper.WriteLine($"Rows affected: {rowsAffected}");
         Assert.True(rowsAffected > 0);
         rowsAffected.Should().Be(goods.Length);
+        foundGoods.Should().BeEmpty();
 
     }
 
@@ -153,10 +158,12 @@ public class GoodsRepositoryTests
 
         // Act
         var rowsAffected = await _goodsRepository.Remove(userId, default);
+        var foundGoods = await _goodsRepository.Query(userId, default);
         
         // Assert
         _testOutputHelper.WriteLine($"Rows affected: {rowsAffected}");
         Assert.True(rowsAffected > 0);
         rowsAffected.Should().Be(goodIds.Length);
+        foundGoods.Should().BeEmpty();
     }
 }

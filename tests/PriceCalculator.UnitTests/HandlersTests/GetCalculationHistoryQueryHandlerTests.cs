@@ -10,7 +10,7 @@ namespace PriceCalculator.UnitTests.HandlersTests;
 public class GetCalculationHistoryQueryHandlerTests
 {
     [Fact]
-    public async Task Handle_MakeAllCalls()
+    public async Task Handle_ValidCalculationIdsPassed_Success()
     {
         //arrange
         var userId = Create.RandomId();
@@ -59,7 +59,7 @@ public class GetCalculationHistoryQueryHandlerTests
     
     
     [Fact]
-    public async Task Handle_ReturnsEmptyWhenWrongIds()
+    public async Task Handle_WrongCalculationIdsPassed_ReturnsEmpty()
     {
         //arrange
         var userId = Create.RandomId();
@@ -96,5 +96,55 @@ public class GetCalculationHistoryQueryHandlerTests
         result.Items.Should().BeEmpty();
 
     }
+    
+    [Fact]
+    public async Task Handle_NotAllCalculationIdsWrong_Success()
+    {
+        //arrange
+        var userId = Create.RandomId();
+        
+        var queryModels = QueryCalculationModelFaker.Generate(5)
+            .Select(x => x.WithUserId(userId))
+            .ToArray();
+
+        var existingIds = queryModels.Select(x => x.Id)
+            .ToArray();
+        
+        var wrongIds = Enumerable.Repeat(Create.RandomId(), 3)
+            .Except(existingIds)
+            .ToArray();
+
+        var calculationIds = existingIds.Union(wrongIds)
+            .ToArray();
+
+        var command = GetCalculationHistoryQueryFaker.Generate()
+            .WithUserId(userId)
+            .WithCalculationIds(calculationIds);
+
+        var filter = QueryCalculationFilterFaker.Generate()
+            .WithUserId(userId)
+            .WithLimit(command.Take)
+            .WithOffset(command.Skip);
+
+        var builder = new GetCalculationHistoryHandlerBuilder();
+        builder.CalculationService
+            .SetupQueryCalculations(queryModels);
+
+        var handler = builder.Build();
+
+        //act
+        var result = await handler.Handle(command, default);
+
+        //asserts
+        handler.CalculationService
+            .VerifyQueryCalculationsWasCalledOnce(filter);
+
+        handler.VerifyNoOtherCalls();
+
+        result.Should().NotBeNull();
+        result.Items.Should().HaveCount(existingIds.Length);
+    }
+    
+    
 
 }

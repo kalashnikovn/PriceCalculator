@@ -13,7 +13,7 @@ namespace PriceCalculator.UnitTests.HandlersTests;
 public class ClearCalculationsHistoryCommandHandlerTests
 {
     [Fact]
-    public async Task Handle_RemoveRequestedCalculations()
+    public async Task Handle_RemoveRequestedCalculations_Success()
     {
         //arrange
         var userId = Create.RandomId();
@@ -52,7 +52,7 @@ public class ClearCalculationsHistoryCommandHandlerTests
     
     
     [Fact]
-    public async Task Handle_RemoveAllUserCalculations()
+    public async Task Handle_RemoveAllUserCalculations_Success()
     {
         //arrange
         var userId = Create.RandomId();
@@ -81,7 +81,7 @@ public class ClearCalculationsHistoryCommandHandlerTests
     }
     
     [Fact]
-    public async Task Handle_ThrowsWhenNotFound()
+    public async Task Handle_CalculationIdsNotFound_ThrowsError()
     {
         //arrange
         var userId = Create.RandomId();
@@ -106,7 +106,7 @@ public class ClearCalculationsHistoryCommandHandlerTests
     
     
     [Fact]
-    public async Task Handle_ThrowsWhenBelongsToAnotherUser()
+    public async Task Handle_CalculationIdsBelongsToAnotherUser_ThrowsError()
     {
         //arrange
         var userId = Create.RandomId();
