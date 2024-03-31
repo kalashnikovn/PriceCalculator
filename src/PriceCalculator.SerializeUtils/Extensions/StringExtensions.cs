@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace PriceCalculator.Api.Extensions;
+namespace PriceCalculator.SerializeUtils.Extensions;
 
 public static class StringExtensions
 {
