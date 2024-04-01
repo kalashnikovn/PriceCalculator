@@ -18,8 +18,12 @@ public static class ServiceCollectionExtensions
         services
             .Configure<GoodPriceCalculatorHostedServiceOptions>(
                 configuration.GetSection("GoodPriceCalculatorHostedServiceOptions"))
+            .Configure<AnomalyFinderHostedServiceOptions>(
+                configuration.GetSection("AnomalyFinderHostedServiceOptions"))
             .AddHostedService<GoodPriceCalculatorHostedService>()
+            .AddHostedService<AnomalyFinderHostedService>()
             .AddTransient(CreateCalculateRequestMessagesConsumer)
+            .AddTransient(CreateCalculateResultsMessagesConsumer)
             .AddTransient(CreateProducer<long, CalculateRequestMessage>)
             .AddTransient(CreateProducer<byte[], byte[]>)
             .AddTransient(CreateProducer<long, CalculateResultMessage>);
@@ -43,6 +47,27 @@ public static class ServiceCollectionExtensions
                     EnableAutoOffsetStore = false
                 })
             .SetValueDeserializer(new JsonValueSerializer<CalculateRequestMessage>())
+            .Build();
+
+        return kafkaConsumer;
+    }
+    
+    private static IConsumer<long, CalculateResultMessage> CreateCalculateResultsMessagesConsumer(
+        IServiceProvider provider)
+    {
+        var options = provider.GetRequiredService<IOptions<AnomalyFinderHostedServiceOptions>>()
+            .Value;
+
+        var kafkaConsumer = new ConsumerBuilder<long, CalculateResultMessage>(
+                new ConsumerConfig()
+                {
+                    BootstrapServers = options.BootstrapServers,
+                    GroupId = options.GroupId,
+                    AutoOffsetReset = AutoOffsetReset.Earliest,
+                    EnableAutoCommit = true,
+                    EnableAutoOffsetStore = false
+                })
+            .SetValueDeserializer(new JsonValueSerializer<CalculateResultMessage>())
             .Build();
 
         return kafkaConsumer;
