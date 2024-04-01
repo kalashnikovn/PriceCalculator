@@ -1,9 +1,8 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization;
 using Confluent.Kafka;
 using PriceCalculator.SerializeUtils.NamingPolicies;
 
-namespace PriceCalculator.BackgroundServices.Serializers;
+namespace PriceCalculator.ProducerApp.Serializers;
 
 public sealed class JsonValueSerializer<T> : ISerializer<T>, IDeserializer<T>
 {
