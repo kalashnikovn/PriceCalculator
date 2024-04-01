@@ -1,7 +1,8 @@
 ﻿using FluentValidation.AspNetCore;
-using PriceCalculator.Api.NamingPolicies;
+using PriceCalculator.BackgroundServices.Extensions;
 using PriceCalculator.Bll.Extensions;
 using PriceCalculator.Dal.Extensions;
+using PriceCalculator.SerializeUtils.NamingPolicies;
 
 namespace PriceCalculator.Api;
 
@@ -20,6 +21,7 @@ public sealed class Startup
             .AddBll()
             .AddDalInfrastructure(_configuration)
             .AddDalRepositories()
+            .AddBackgroundServices(_configuration)
             .AddControllers()
             .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamingPolicy())
             .AddFluentValidation(conf =>

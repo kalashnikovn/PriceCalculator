@@ -7,14 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="11.9.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PriceCalculator.BackgroundServices\PriceCalculator.BackgroundServices.csproj" />
     <ProjectReference Include="..\PriceCalculator.Bll\PriceCalculator.Bll.csproj" />
     <ProjectReference Include="..\PriceCalculator.Dal\PriceCalculator.Dal.csproj" />
+    <ProjectReference Include="..\PriceCalculator.SerializeUtils\PriceCalculator.SerializeUtils.csproj" />
   </ItemGroup>
 
   <ItemGroup>
