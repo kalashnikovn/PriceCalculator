@@ -13,6 +13,8 @@ public class TestFixture
     
     public IGoodsRepository GoodsRepository { get; }
     
+    public IAnomalyRepository AnomalyRepository { get; }
+    
     public TestFixture()
     {
         Console.WriteLine(Directory.GetCurrentDirectory());
@@ -34,8 +36,10 @@ public class TestFixture
 
         using var scope = host.Services.CreateScope();
         var serviceProvider = scope.ServiceProvider;
+        
         CalculationRepository = serviceProvider.GetRequiredService<ICalculationsRepository>();
         GoodsRepository = serviceProvider.GetRequiredService<IGoodsRepository>();
+        AnomalyRepository = serviceProvider.GetRequiredService<IAnomalyRepository>();
     }
     
     private static void ClearDatabase(IHost host)

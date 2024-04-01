@@ -19,6 +19,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingInfrastructure", "te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PriceCalculator.UnitTests", "tests\PriceCalculator.UnitTests\PriceCalculator.UnitTests.csproj", "{F1FD32A7-0E62-4BC7-BD3D-E93AFA37CD30}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PriceCalculator.BackgroundServices", "src\PriceCalculator.BackgroundServices\PriceCalculator.BackgroundServices.csproj", "{352DDF95-89D4-4321-A091-373EC1A3F661}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PriceCalculator.SerializeUtils", "src\PriceCalculator.SerializeUtils\PriceCalculator.SerializeUtils.csproj", "{C011C852-7B71-4E50-9BCB-A386BA55BB2B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PriceCalculator.ProducerApp", "src\PriceCalculator.ProducerApp\PriceCalculator.ProducerApp.csproj", "{C0BD2D0C-9787-49B2-9BF8-A9F7F10C7BFC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +58,18 @@ Global
 		{F1FD32A7-0E62-4BC7-BD3D-E93AFA37CD30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1FD32A7-0E62-4BC7-BD3D-E93AFA37CD30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1FD32A7-0E62-4BC7-BD3D-E93AFA37CD30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{352DDF95-89D4-4321-A091-373EC1A3F661}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{352DDF95-89D4-4321-A091-373EC1A3F661}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{352DDF95-89D4-4321-A091-373EC1A3F661}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{352DDF95-89D4-4321-A091-373EC1A3F661}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C011C852-7B71-4E50-9BCB-A386BA55BB2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C011C852-7B71-4E50-9BCB-A386BA55BB2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C011C852-7B71-4E50-9BCB-A386BA55BB2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C011C852-7B71-4E50-9BCB-A386BA55BB2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0BD2D0C-9787-49B2-9BF8-A9F7F10C7BFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0BD2D0C-9787-49B2-9BF8-A9F7F10C7BFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0BD2D0C-9787-49B2-9BF8-A9F7F10C7BFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0BD2D0C-9787-49B2-9BF8-A9F7F10C7BFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2BB6C88E-FDA3-4C3A-AD09-549AEDFD57CD} = {BE4CE909-13BA-49F0-89C0-80FF66650F26}
@@ -60,5 +78,8 @@ Global
 		{011EED9B-A651-47EB-8419-216EFBD10E76} = {BE4CE909-13BA-49F0-89C0-80FF66650F26}
 		{C5B6F74B-9D4D-4D77-9F7E-06897C09EAC8} = {2593451D-6919-4048-944A-5A0A37805DCD}
 		{F1FD32A7-0E62-4BC7-BD3D-E93AFA37CD30} = {2593451D-6919-4048-944A-5A0A37805DCD}
+		{352DDF95-89D4-4321-A091-373EC1A3F661} = {BE4CE909-13BA-49F0-89C0-80FF66650F26}
+		{C011C852-7B71-4E50-9BCB-A386BA55BB2B} = {BE4CE909-13BA-49F0-89C0-80FF66650F26}
+		{C0BD2D0C-9787-49B2-9BF8-A9F7F10C7BFC} = {BE4CE909-13BA-49F0-89C0-80FF66650F26}
 	EndGlobalSection
 EndGlobal

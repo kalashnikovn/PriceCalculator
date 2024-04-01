@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
-using PriceCalculator.Api.Extensions;
+using PriceCalculator.SerializeUtils.Extensions;
 
-namespace PriceCalculator.Api.NamingPolicies;
+namespace PriceCalculator.SerializeUtils.NamingPolicies;
 
 public sealed class SnakeCaseNamingPolicy : JsonNamingPolicy
 {
