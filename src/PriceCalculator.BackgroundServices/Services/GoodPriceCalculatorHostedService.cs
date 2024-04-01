@@ -1,11 +1,14 @@
 ﻿using System.Text;
 using Confluent.Kafka;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using PriceCalculator.BackgroundServices.Messages;
 using PriceCalculator.BackgroundServices.Options;
 using PriceCalculator.BackgroundServices.Validators;
+using PriceCalculator.Bll.Commands;
+using PriceCalculator.Bll.Models;
 
 namespace PriceCalculator.BackgroundServices.Services;
 
@@ -70,13 +73,60 @@ public sealed class GoodPriceCalculatorHostedService : BackgroundService
                 continue;
             }
 
-            
-            Console.WriteLine(messageValue.GoodId);
+
+            var calculateResult = await CalculateGoodDeliveryPrice(messageValue, stoppingToken);
+
+            await SendCalculationResultMessage(calculateResult, stoppingToken);
 
             _consumer.StoreOffset(result);
         }
 
         _consumer.Close();
+    }
+
+    private async Task<CalculateResultMessage> CalculateGoodDeliveryPrice(
+        CalculateRequestMessage calculateRequestMessage,
+        CancellationToken cancellationToken)
+    {
+        var command = new CalculateGoodDeliveryPriceCommand(
+            new GoodModel(
+                Height: calculateRequestMessage.Height,
+                Length: calculateRequestMessage.Length,
+                Width: calculateRequestMessage.Width,
+                Weight: calculateRequestMessage.Weight
+                ));
+        
+        using var scope = _serviceProvider.CreateScope();
+        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+
+        var calculationResult = await mediator.Send(command, cancellationToken);
+
+        return new CalculateResultMessage(
+            calculateRequestMessage.GoodId,
+            calculationResult.Price);
+    }
+
+    private async Task SendCalculationResultMessage(
+        CalculateResultMessage resultMessage,
+        CancellationToken cancellationToken)
+    {
+        var message = new Message<long, CalculateResultMessage>()
+        {
+            Headers = new()
+            {
+                {"Producer", Encoding.Default.GetBytes("GoodPriceCalculatorHostedService")},  
+                {"Machine", Encoding.Default.GetBytes(Environment.MachineName)},  
+            },
+            Key = resultMessage.GoodId,
+            Value = resultMessage
+        };
+        
+        var producer = _serviceProvider.GetRequiredService<IProducer<long, CalculateResultMessage>>();
+
+        await producer.ProduceAsync(
+            _optionsMonitor.CurrentValue.CalculateResultsTopic,
+            message,
+            cancellationToken);
     }
 
     private async Task SendMessageToDeadLetterQueue<TKey, TValue>(

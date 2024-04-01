@@ -21,7 +21,8 @@ public static class ServiceCollectionExtensions
             .AddHostedService<GoodPriceCalculatorHostedService>()
             .AddTransient(CreateCalculateRequestMessagesConsumer)
             .AddTransient(CreateProducer<long, CalculateRequestMessage>)
-            .AddTransient(CreateProducer<byte[], byte[]>);
+            .AddTransient(CreateProducer<byte[], byte[]>)
+            .AddTransient(CreateProducer<long, CalculateResultMessage>);
 
         return services;
     }
