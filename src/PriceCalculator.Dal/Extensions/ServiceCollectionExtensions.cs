@@ -11,8 +11,10 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddDalRepositories(this IServiceCollection services)
     {
-        services.AddScoped<IGoodsRepository, GoodsRepository>();
-        services.AddScoped<ICalculationsRepository, CalculationsRepository>();
+        services
+            .AddScoped<IGoodsRepository, GoodsRepository>()
+            .AddScoped<ICalculationsRepository, CalculationsRepository>()
+            .AddScoped<IAnomalyRepository, AnomalyRepository>();
         
         return services;
     }
