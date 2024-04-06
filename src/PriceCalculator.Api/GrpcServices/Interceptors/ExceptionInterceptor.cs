@@ -32,4 +32,44 @@ public sealed class ExceptionInterceptor : Interceptor
             throw new RpcException(new Status(StatusCode.Internal, exception.Message));
         }
     }
+    
+    public override async Task ServerStreamingServerHandler<TRequest, TResponse>(
+        TRequest request,
+        IServerStreamWriter<TResponse> responseStream,
+        ServerCallContext context,
+        ServerStreamingServerMethod<TRequest, TResponse> continuation)
+    {
+        try
+        {
+            await continuation(request, responseStream, context);
+        }
+        catch (RpcException)
+        {
+            throw;
+        }
+        catch (Exception exception)
+        {
+            throw new RpcException(new Status(StatusCode.Internal, exception.Message));
+        }
+    }
+
+    public override async Task DuplexStreamingServerHandler<TRequest, TResponse>(
+        IAsyncStreamReader<TRequest> requestStream,
+        IServerStreamWriter<TResponse> responseStream,
+        ServerCallContext context,
+        DuplexStreamingServerMethod<TRequest, TResponse> continuation)
+    {
+        try
+        {
+            await continuation(requestStream, responseStream, context);
+        }
+        catch (RpcException)
+        {
+            throw;
+        }
+        catch (Exception exception)
+        {
+            throw new RpcException(new Status(StatusCode.Internal, exception.Message));
+        }
+    }
 }
