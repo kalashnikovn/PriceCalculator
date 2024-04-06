@@ -1,4 +1,5 @@
 ﻿using FluentValidation.AspNetCore;
+using PriceCalculator.Api.Middlewares;
 using PriceCalculator.BackgroundServices.Extensions;
 using PriceCalculator.Bll.Extensions;
 using PriceCalculator.Dal.Extensions;
@@ -45,6 +46,8 @@ public sealed class Startup
         app.UseSwaggerUI();
 
         app.UseRouting();
+
+        app.UseMiddleware<ExceptionHandlerMiddleware>();
 
         app.UseEndpoints(endpoints =>
         {
