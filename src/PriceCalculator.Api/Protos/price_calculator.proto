@@ -5,6 +5,8 @@ option csharp_namespace = "PriceCalculator.Api.GrpcServices";
 service DeliveryPriceCalculator {
   rpc Calculate (CalculateRequestMessage) returns (CalculateResponseMessage);
   rpc ClearHistory (ClearHistoryRequestMessage) returns (ClearHistoryResponseMessage);
+  rpc GetHistory (GetHistoryRequestMessage) returns (stream GetHistoryResponseMessage);
+  rpc CalculateDuplex (stream CalculateRequestMessage) returns (stream CalculateResponseMessage);
 }
 
 // Calculate messages
@@ -33,6 +35,23 @@ message ClearHistoryRequestMessage {
 
 message ClearHistoryResponseMessage {}
 
+
+// Get history messages
+message GetHistoryRequestMessage {
+  int64 user_id = 1;
+  int32 take = 2;
+}
+
+message GetHistoryResponseMessage {
+  CargoResponse cargo = 1;
+  DecimalValue price = 2;
+}
+
+message CargoResponse {
+  double volume = 1;
+  double weight = 2;
+  repeated int64 good_ids = 3;
+}
 
 // Custom decimal
 message DecimalValue {
