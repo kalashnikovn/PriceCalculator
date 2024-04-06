@@ -1,4 +1,7 @@
-﻿using FluentValidation.AspNetCore;
+﻿using Calzolari.Grpc.AspNetCore.Validation;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using PriceCalculator.Api.GrpcServices;
 using PriceCalculator.Api.Middlewares;
 using PriceCalculator.BackgroundServices.Extensions;
 using PriceCalculator.Bll.Extensions;
@@ -25,15 +28,18 @@ public sealed class Startup
             .AddBackgroundServices(_configuration)
             .AddControllers()
             .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamingPolicy())
-            .AddFluentValidation(conf =>
-            {
-                conf.RegisterValidatorsFromAssembly(typeof(Program).Assembly);
-                conf.AutomaticValidationEnabled = true;
-            })
             .Services
+            .AddFluentValidationAutoValidation()
+            .AddFluentValidationClientsideAdapters()
+            .AddValidatorsFromAssembly(typeof(Program).Assembly)
+            .AddGrpcValidation()
             .AddEndpointsApiExplorer()
-            .AddSwaggerGen(o => o.CustomSchemaIds(x => x.FullName?.Replace("+", ".")));
-
+            .AddSwaggerGen(o => o.CustomSchemaIds(x => x.FullName?.Replace("+", ".")))
+            .AddGrpcReflection()
+            .AddGrpc(options =>
+            {
+                options.EnableMessageValidation();
+            });
     }
     
 
@@ -52,6 +58,8 @@ public sealed class Startup
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
+            endpoints.MapGrpcService<DeliveryPriceCalculatorService>();
+            endpoints.MapGrpcReflectionService();
         });
     }
 }
