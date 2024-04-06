@@ -1,6 +1,5 @@
 ﻿using Grpc.Core;
 using MediatR;
-using PriceCalculator.Api.Responses.V1;
 using PriceCalculator.Bll.Commands;
 using PriceCalculator.Bll.Models;
 
@@ -40,8 +39,15 @@ public sealed class DeliveryPriceCalculatorService : DeliveryPriceCalculator.Del
         };
     }
 
-    public override Task<ClearHistoryResponseMessage> ClearHistory(ClearHistoryRequestMessage request, ServerCallContext context)
+    public override async Task<ClearHistoryResponseMessage> ClearHistory(ClearHistoryRequestMessage request, ServerCallContext context)
     {
-        return base.ClearHistory(request, context);
+        var command = new ClearCalculationsHistoryCommand(
+            request.UserId,
+            request.CalculationIds.ToArray()
+        );
+
+        await _mediator.Send(command, context.CancellationToken);
+
+        return new ClearHistoryResponseMessage();
     }
 }

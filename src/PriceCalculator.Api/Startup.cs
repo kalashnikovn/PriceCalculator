@@ -2,6 +2,7 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using PriceCalculator.Api.GrpcServices;
+using PriceCalculator.Api.GrpcServices.Interceptors;
 using PriceCalculator.Api.Middlewares;
 using PriceCalculator.BackgroundServices.Extensions;
 using PriceCalculator.Bll.Extensions;
@@ -38,6 +39,7 @@ public sealed class Startup
             .AddGrpcReflection()
             .AddGrpc(options =>
             {
+                options.Interceptors.Add<ExceptionInterceptor>();
                 options.EnableMessageValidation();
             });
     }
