@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+option csharp_namespace = "PriceCalculator.GrpcClient";
+
+service DeliveryPriceCalculator {
+  rpc Calculate (CalculateRequestMessage) returns (CalculateResponseMessage);
+  rpc ClearHistory (ClearHistoryRequestMessage) returns (ClearHistoryResponseMessage);
+  rpc GetHistory (GetHistoryRequestMessage) returns (stream GetHistoryResponseMessage);
+  rpc CalculateDuplex (stream CalculateRequestMessage) returns (stream CalculateResponseMessage);
+}
+
+// Calculate messages
+message GoodProperties {
+  double length = 1;
+  double width = 2;
+  double height = 3;
+  double weight = 4;
+}
+
+message CalculateRequestMessage {
+  int64 user_id = 1;
+  repeated GoodProperties goods = 2;
+}
+
+message CalculateResponseMessage {
+  int64 calculation_id = 1;
+  DecimalValue price = 2;
+}
+
+// Clear history messages
+message ClearHistoryRequestMessage {
+  int64 user_id = 1;
+  repeated int64 calculation_ids = 2;
+}
+
+message ClearHistoryResponseMessage {}
+
+
+// Get history messages
+message GetHistoryRequestMessage {
+  int64 user_id = 1;
+  int32 take = 2;
+}
+
+message GetHistoryResponseMessage {
+  CargoResponse cargo = 1;
+  DecimalValue price = 2;
+}
+
+message CargoResponse {
+  double volume = 1;
+  double weight = 2;
+  repeated int64 good_ids = 3;
+}
+
+// Custom decimal
+message DecimalValue {
+  int64 units = 1;
+  sfixed32 nanos = 2;
+}
