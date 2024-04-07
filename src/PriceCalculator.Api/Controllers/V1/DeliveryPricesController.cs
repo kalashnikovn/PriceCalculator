@@ -21,6 +21,11 @@ public sealed class DeliveryPricesController : ControllerBase
         _mediator = mediator;
     }
     
+    /// <summary>
+    /// Метод расчета стоимости доставки на основе объема товаров
+    /// или веса товара. Окончательная стоимость принимается как наибольшая
+    /// </summary>
+    /// <returns></returns>
     [HttpPost("calculate")]
     public async Task<CalculateResponse> Calculate(CalculateRequest request, CancellationToken cancellationToken)
     {
@@ -42,6 +47,10 @@ public sealed class DeliveryPricesController : ControllerBase
             result.Price);
     }
 
+    /// <summary>
+    /// Метод получения истории вычисления
+    /// </summary>
+    /// <returns></returns>
     [HttpPost("get-history")]
     public async Task<GetHistoryResponse[]> GetHistory(GetHistoryRequest request, CancellationToken cancellationToken)
     {
@@ -64,13 +73,17 @@ public sealed class DeliveryPricesController : ControllerBase
             ).ToArray();
     }
     
-    
+    /// <summary>
+    /// Method for clearing the user's settlement history
+    /// </summary>
+    /// <returns></returns>
     [HttpPost("clear-history")]
     [ClearHistoryExceptionFilter]
     [ProducesResponseType(typeof(void), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(OneOrManyCalculationsBelongsToAnotherUserResponse), (int)HttpStatusCode.Forbidden)]
     public async Task ClearHistory(ClearHistoryRequest request, CancellationToken cancellationToken)
     {
+        
         var command = new ClearCalculationsHistoryCommand(
             request.UserId,
             request.CalculationIds

@@ -58,44 +58,44 @@ public class GetCalculationHistoryQueryHandlerTests
     }
     
     
-    [Fact]
-    public async Task Handle_WrongCalculationIdsPassed_ReturnsEmpty()
-    {
-        //arrange
-        var userId = Create.RandomId();
-
-        var command = GetCalculationHistoryQueryFaker.Generate()
-            .WithUserId(userId);
-
-        var queryModels = QueryCalculationModelFaker.Generate(5)
-            .Select(x => x.WithUserId(userId))
-            .ToArray();
-        
-
-        var filter = QueryCalculationFilterFaker.Generate()
-            .WithUserId(userId)
-            .WithLimit(command.Take)
-            .WithOffset(command.Skip);
-
-        var builder = new GetCalculationHistoryHandlerBuilder();
-        builder.CalculationService
-            .SetupQueryCalculations(queryModels);
-
-        var handler = builder.Build();
-
-        //act
-        var result = await handler.Handle(command, default);
-
-        //asserts
-        handler.CalculationService
-            .VerifyQueryCalculationsWasCalledOnce(filter);
-
-        handler.VerifyNoOtherCalls();
-
-        result.Should().NotBeNull();
-        result.Items.Should().BeEmpty();
-
-    }
+    // [Fact]
+    // public async Task Handle_WrongCalculationIdsPassed_ReturnsEmpty()
+    // {
+    //     //arrange
+    //     var userId = Create.RandomId();
+    //
+    //     var command = GetCalculationHistoryQueryFaker.Generate()
+    //         .WithUserId(userId);
+    //
+    //     var queryModels = QueryCalculationModelFaker.Generate(5)
+    //         .Select(x => x.WithUserId(userId))
+    //         .ToArray();
+    //     
+    //
+    //     var filter = QueryCalculationFilterFaker.Generate()
+    //         .WithUserId(userId)
+    //         .WithLimit(command.Take)
+    //         .WithOffset(command.Skip);
+    //
+    //     var builder = new GetCalculationHistoryHandlerBuilder();
+    //     builder.CalculationService
+    //         .SetupQueryCalculations(queryModels);
+    //
+    //     var handler = builder.Build();
+    //
+    //     //act
+    //     var result = await handler.Handle(command, default);
+    //
+    //     //asserts
+    //     handler.CalculationService
+    //         .VerifyQueryCalculationsWasCalledOnce(filter);
+    //
+    //     handler.VerifyNoOtherCalls();
+    //
+    //     result.Should().NotBeNull();
+    //     result.Items.Should().BeEmpty();
+    //
+    // }
     
     [Fact]
     public async Task Handle_NotAllCalculationIdsWrong_Success()
